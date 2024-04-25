@@ -12,7 +12,7 @@
   <img src="https://github.com/xXViridianXx/ZotClass/blob/main/images/HomeTyping.png" alt="HomeTyping" style="width: 48%; height: 20%;">
 </div>
 
-### Find nearby SideQuests on the Homescreen
+### Check class status!
 <div class="image-container" style="display: flex; justify-content: space-between;">
   <img src="https://github.com/xXViridianXx/ZotClass/blob/main/images/ClassesPage.png" alt="Page" style="width: 48%; height: 20%;">
   <img src="https://github.com/xXViridianXx/ZotClass/blob/main/images/ClassInfoPage.png" alt="InfoPage" style="width: 48%; height: 20%;">
