@@ -23,7 +23,7 @@ export default BackButton
 
 const styles = StyleSheet.create({
     containerStyles: {
-        left: 30,
+        left: 20,
         bottom: 40,
         position: "absolute",
         backgroundColor: "rgba( 50, 85, 147, .5)",

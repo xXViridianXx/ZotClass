@@ -8,7 +8,6 @@ const ClassCard = React.memo(({ item }) => {
     const navigation = useNavigation()
     const sections = item.sections
     const classStatus = getClassStatus(sections)
-    // console.log(sections[0])
     return (
         <TouchableOpacity style={[styles.cardContainer, { borderColor: StatusColor(classStatus) }]} onPress={() => navigation.navigate("ClassInfoScreen", { classInfo: item })}>
             <View>

@@ -21,7 +21,6 @@ const SectionCard = React.memo(({ section }) => {
     const location = meetings.bldg, days = meetings.days
     const time = meetings.time
     const renderStaff = () => {
-        // console.log(sectionType)
         filteredStaff = Array.from(staff).map((item) => <Text key={item} style={{ fontWeight: 800 }}>{item}</Text>)
         return (
             <View style={{ width: "45%", padding: 10, borderLeftWidth: 3 }}>
@@ -55,14 +54,7 @@ const SectionCard = React.memo(({ section }) => {
                     <Text style={styles.classInfoStyles}>{`Days`}</Text>
                     <Text style={styles.classInfoStyles}>{`${days}`}</Text>
                 </View>
-                {/* <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", backgroundColor: "white", padding: 10, borderBottomWidth: 3, borderBottomColor: "#e5e5e5"}}>
-                    <Text>{`${location}`}</Text>
-                    <Text>{`${days}`}</Text>
-                    <Text>{`${time}`}</Text>
-                </View> */}
             </View>
-            {/* <Text>{item.name}</Text> */}
-            {/* <Text>{item.title}</Text> */}
         </View>
     )
 })

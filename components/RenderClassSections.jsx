@@ -8,19 +8,6 @@ const RenderClassSections = ({ classSections, className, classTitle }) => {
     let staff = new Set(classSections[0].instructors);
     staff = [...staff]
 
-    // const renderStaff = () => {
-    //     filteredStaff = Array.from(staff).map((item) => <Text key={item} style={{ color: "black", fontWeight: "800", fontSize: 20 }}>{item}</Text>)
-    //     return (
-    //         <View style={{ flexDirection: "row" }}>
-    //             <View style={{ borderBottomWidth: 3, borderBottomColor: "black" }}>
-    //                 {filteredStaff}
-    //             </View>
-    //             <View>
-
-    //             </View>
-    //         </View>
-    //     )
-    // };
     const renderSection = ({ item, multiStaff}) => {
         return (<SectionCard section={item}/>)
     }
@@ -29,7 +16,6 @@ const RenderClassSections = ({ classSections, className, classTitle }) => {
             <View style={styles.classContainer}>
                 <Text style={styles.className}>{name}</Text>
                 <Text style={styles.classTitle}>{title}</Text>
-                {/* {renderStaff()} */}
             </View>
             <View style={{ flex: 1, marginHorizontal: 10}}>
                 <FlatList
@@ -39,32 +25,6 @@ const RenderClassSections = ({ classSections, className, classTitle }) => {
                     keyExtractor={(item, index) => index.toString()}
                 />
             </View>
-            {/* {Object.keys(classSections).map(code => {
-                const sectionInfo = classSections[code]
-                const classType = sectionInfo.classType
-                const classStatus = sectionInfo.classStatus
-                const classInstructors = sectionInfo.classInstructors
-                const maxEnrollment = sectionInfo.maxEnrollment
-                const enrolled = sectionInfo.enrolled
-                const classSection = sectionInfo.classSection
-                const classUnits = sectionInfo.classUnits
-                const classLocation = sectionInfo.classLocation
-                const startTime = sectionInfo.startTime
-                const endTime = sectionInfo.endTime
-                const days = sectionInfo.days.join(" ")
-                return (
-                    <View key={code} style={styles.section}>
-                        <Text>{`${code} || ${classUnits} || ${classSection} || ${classType}`}</Text>
-                        <Text>{`${classStatus} || ${enrolled} || ${maxEnrollment}`}</Text>
-                        <Text>{`${classLocation} || ${startTime} || ${endTime} ${days}`}</Text>
-                        <View>
-                            {classInstructors.map((instructor, index) => (
-                                <Text key={index}>{`${instructor}`}</Text>
-                            ))}
-                        </View>
-                    </View>
-                )
-            })} */}
         </View>
     )
 }

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { Dimensions, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback, Keyboard, TextInput } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { useNavigation } from '@react-navigation/native'
 import { data, seasons, years } from '../components/Subjects';
@@ -13,11 +13,17 @@ const ClassesScreen = () => {
 
     const [buttonPosition, setButtonPosition] = useState({ left: 0 });
 
+    const handleYearChange = (value) => {
+        if (value.length > 4) {
+            return;
+        }
+        setSelectedYear(value);
+    };
+
     useEffect(() => {
         const { width, height } = Dimensions.get('window');
         const buttonWidth = 50; // Adjust button width as needed
         const left = (width - buttonWidth) / 2;
-
         setButtonPosition({ left });
     }, []);
 
@@ -26,7 +32,6 @@ const ClassesScreen = () => {
             <SafeAreaView style={styles.container}>
                 <StatusBar style="auto" />
                 <View style={{ flex: 1, width: '100%', justifyContent: "space-evenly", alignItems: 'center', }}>
-                    {/* <Image source={require('../images/Peter.png')} style={{ width: 150, height: 150 }} /> */}
                     <Text style={{ fontSize: 45, fontWeight: 700, color: "rgba( 50, 85, 147, 100)" }}>ZotClass</Text>
                     <SelectList
                         data={data}
@@ -48,19 +53,21 @@ const ClassesScreen = () => {
                         maxHeight={100}
                         setSelected={(season) => (setSelectedSeason(season))}
                     />
-                    <SelectList data={years}
-                        boxStyles={styles.boxStyle}
-                        inputStyles={styles.inputTextStyle}
-                        dropdownTextStyles={styles.dropDownTextStyle}
-                        dropdownStyles={{ borderWidth: 0, backgroundColor: "white" }}
-                        placeholder={"Year"}
-                        search={false}
-                        maxHeight={100}
-                        setSelected={(year) => { setSelectedYear(year); }} />
+
+                    <TextInput placeholder="2024"
+                        keyboardType="numeric"
+                        value={selectedYear}
+                        onChangeText={handleYearChange}
+                        maxLength={4}
+                        style={[styles.boxStyle, { paddingLeft: 20, paddingBottom: 10, fontWeight: "bold", color: "rgba( 50, 85, 147, 100)" }]}></TextInput>
                     <TouchableOpacity
                         style={styles.searchButton}
                         onPress={() => {
-                            navigation.navigate("ClassesScreen", { selected: selected, selectedSeason: selectedSeason, selectedYear: selectedYear, buttonPosition })
+                            if (selected && selectedSeason && selectedYear) {
+                                navigation.navigate("ClassesScreen", { selected, selectedSeason, selectedYear, buttonPosition });
+                            } else {
+                                alert("Please fill out all fields");
+                            }
                         }}>
                         <View>
                             <Text style={{ fontWeight: 700, color: "white" }}>Search</Text>
@@ -79,15 +86,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         alignItems: 'center',
-        // justifyContent: 'center',
     },
     inputTextStyle: {
         color: "rgba( 50, 85, 147, 100)",
-        fontWeight: 700
+        fontWeight: "bold"
     },
     dropDownTextStyle: {
         color: "#011627",
-        fontWeight: 700,
+        fontWeight: "bold",
         width: 280
     },
     boxStyle: {
