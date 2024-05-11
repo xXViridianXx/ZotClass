@@ -2,6 +2,8 @@ const StatusColor = (status) => {
     switch (status) {
         case 'OPEN':
             return '#aaf683';
+        case 'NewOnly':
+            return '#aaf683';
         case 'FULL':
             return '#ff5a5f';
         case 'Waitl':

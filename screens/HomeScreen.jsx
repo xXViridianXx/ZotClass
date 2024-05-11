@@ -35,11 +35,11 @@ const ClassesScreen = () => {
                     keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
                     style={{ flex: 1, width: '100%', justifyContent: "space-evenly", alignItems: 'center', }}>
                     <StatusBar style="auto" />
-                    <Text style={{ fontSize: 45, fontWeight: 700, color: "rgba( 50, 85, 147, 100)" }}>ZotClass</Text>
+                    <Text style={{ fontSize: 45, fontWeight: "800", fontStyle: 'italic', color: "rgba( 50, 85, 147, 100)" }}>ZotClass</Text>
                     <Dropdown
                         style={styles.boxStyle}
                         data={data}
-                        search
+                        search={true}
                         labelField="value"
                         valueField="key"
                         placeholder='Subject'
@@ -67,12 +67,14 @@ const ClassesScreen = () => {
                             setSelectedSeason(season.key);
                         }}
                     />
-                    <TextInput placeholder="2024"
+                    <TextInput
+                        placeholder="2024"
                         keyboardType="numeric"
                         value={selectedYear}
                         onChangeText={handleYearChange}
                         maxLength={4}
                         style={[styles.boxStyle, { paddingBottom: 10, fontWeight: "800", color: "rgba( 50, 85, 147, 100)" }]}
+                        placeholderTextColor={"#a4a4a4"}
                     >
                     </TextInput>
 
