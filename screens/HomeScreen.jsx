@@ -1,17 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { Dimensions, Platform, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback, Keyboard, TextInput, KeyboardAvoidingView } from 'react-native';
+import { Dimensions, Platform, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback, Keyboard, TextInput, KeyboardAvoidingView, useColorScheme, Button } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useNavigation } from '@react-navigation/native'
 import { data, seasons, years } from '../components/Subjects';
-
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadDarkMode, toggleDarkMode } from '../redux/reducers/user';
 const ClassesScreen = () => {
     const navigation = useNavigation();
     const [selected, setSelected] = useState("")
     const [selectedYear, setSelectedYear] = useState("")
     const [selectedSeason, setSelectedSeason] = useState("")
     const [buttonPosition, setButtonPosition] = useState({ left: 0 });
+    // const [darkMode, setDarkMode] = useState(false)
 
+    const dispatch = useDispatch();
+    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
+
+    useEffect(() => {
+        dispatch(loadDarkMode());
+    }, [dispatch]);
+
+    const handleToggle = () => {
+        dispatch(toggleDarkMode());
+    };
 
     const handleYearChange = (value) => {
         if (value.length > 4) {
@@ -20,6 +33,13 @@ const ClassesScreen = () => {
         setSelectedYear(value);
     };
 
+    const dynamicStyle = (darkMode, darkThemeColor, lightThemeColor) => {
+        return darkMode ? darkThemeColor : lightThemeColor
+    }
+
+    // const toggleDarkMode = () => {
+    //     setDarkMode(prevMode => !prevMode)
+    // }
     useEffect(() => {
         const { width, height } = Dimensions.get('window');
         const buttonWidth = 50; // Adjust button width as needed
@@ -29,59 +49,70 @@ const ClassesScreen = () => {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={[styles.container, { backgroundColor: dynamicStyle(darkMode, "black", "white") }]}>
+                <View style={{ width: '80%' }}>
+                    <TouchableOpacity onPress={handleToggle}
+                        style={{ padding: 10, borderRadius: 5, alignSelf: 'flex-start', backgroundColor: darkMode ? "#011627" : "rgba( 50, 85, 147, 100)" }}
+                        activeOpacity={1}>
+                        <Ionicons name="moon" size={25} color="white" />
+                    </TouchableOpacity>
+                </View>
                 <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                     keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
                     style={{ flex: 1, width: '100%', justifyContent: "space-evenly", alignItems: 'center', }}>
-                    <StatusBar style="auto" />
-                    <Text style={{ fontSize: 45, fontWeight: "800", fontStyle: 'italic', color: "rgba( 50, 85, 147, 100)" }}>ZotClass</Text>
+
+                    <StatusBar style={darkMode ? 'light' : 'dark'} />
+
+
+                    <Text style={{ fontSize: 45, fontWeight: "800", fontStyle: 'italic', color: dynamicStyle(darkMode, "rgba( 50, 85, 147, 100)", "rgba( 50, 85, 147, 100)") }}>ZotClass</Text>
                     <Dropdown
-                        style={styles.boxStyle}
+                        style={[styles.boxStyle, { borderBottomColor: dynamicStyle(darkMode, "#011627", "rgba( 50, 85, 147, 100)") }]}
                         data={data}
                         search={true}
                         labelField="value"
                         valueField="key"
-                        placeholder='Subject'
-                        placeholderStyle={{ color: "rgba(169, 169, 169, 1)", fontWeight: 700 }}
+                        placeholder='Enter Subject...'
+                        activeColor={dynamicStyle(darkMode, "black", "white")}
+                        placeholderStyle={{ color: "#e5e5e5", fontWeight: 700 }}
                         searchPlaceholder="Search Subject..."
                         selectedTextStyle={styles.selectedTextStyle}
-                        itemTextStyle={styles.dropDownTextStyle}
-                        containerStyle={{ borderRadius: 5 }}
+                        inputSearchStyle={{ color: dynamicStyle(darkMode, "white", "#011627") }}
+                        itemTextStyle={[styles.dropDownTextStyle, { color: dynamicStyle(darkMode, "white", "#011627") }]}
+                        containerStyle={{ borderRadius: 5, backgroundColor: dynamicStyle(darkMode, "#011627", "white") }}
                         onChange={(subject) => {
                             setSelected(subject.key);
                         }}
                     />
                     <Dropdown
-                        style={styles.boxStyle}
+                        style={[styles.boxStyle, { borderBottomColor: dynamicStyle(darkMode, "#011627", "rgba( 50, 85, 147, 100)") }]}
                         data={seasons}
                         labelField="value"
                         valueField="key"
                         maxHeight={200}
-                        placeholder='Quarter'
-                        placeholderStyle={{ color: "rgba(169, 169, 169, 1)", fontWeight: 700 }}
+                        activeColor={dynamicStyle(darkMode, "black", "white")}
+                        placeholder='Enter Quarter...'
+                        placeholderStyle={{ color: "#e5e5e5", fontWeight: 700 }}
                         selectedTextStyle={styles.selectedTextStyle}
-                        itemTextStyle={styles.dropDownTextStyle}
-                        containerStyle={{ borderRadius: 5 }}
+                        itemTextStyle={[styles.dropDownTextStyle, { color: dynamicStyle(darkMode, "white", "#011627") }]}
+                        containerStyle={{ borderRadius: 5, backgroundColor: dynamicStyle(darkMode, "#011627", "white") }}
                         onChange={(season) => {
                             setSelectedSeason(season.key);
                         }}
                     />
                     <TextInput
-                        placeholder="2024"
+                        placeholder="Enter Year..."
                         keyboardType="numeric"
                         value={selectedYear}
                         onChangeText={handleYearChange}
                         maxLength={4}
-                        style={[styles.boxStyle, { paddingBottom: 10, fontWeight: "800", color: "rgba( 50, 85, 147, 100)" }]}
-                        placeholderTextColor={"#a4a4a4"}
+                        style={[styles.boxStyle, { paddingBottom: 10, fontWeight: "700", color: "rgba( 50, 85, 147, 100)", fontSize: 16, borderBottomColor: dynamicStyle(darkMode, "#011627", "rgba( 50, 85, 147, 100)") }]}
+                        placeholderTextColor={"#e5e5e5"}
                     >
                     </TextInput>
 
-
-
                     <TouchableOpacity
-                        style={styles.searchButton}
+                        style={[styles.searchButton, { backgroundColor: dynamicStyle(darkMode, "#011627", "rgba( 50, 85, 147, 100)") }]}
                         onPress={() => {
                             if (selected && selectedSeason && selectedYear) {
                                 navigation.navigate("ClassesScreen", { selected, selectedSeason, selectedYear, buttonPosition });
@@ -90,13 +121,13 @@ const ClassesScreen = () => {
                             }
                         }}>
                         <View>
-                            <Text style={{ fontWeight: 700, color: "white" }}>Search</Text>
+                            <Text style={{ fontWeight: 700, color: dynamicStyle(darkMode, "rgba( 50, 85, 147, 100)", "white") }}>Search</Text>
                         </View>
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
 
             </SafeAreaView>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback >
     )
 }
 
@@ -107,6 +138,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         alignItems: 'center',
+        paddingTop: Platform.OS === 'android' ? 40 : 0,
+        paddingBottom: Platform.OS === 'android' ? 10 : 0
     },
     inputTextStyle: {
         color: "rgba( 50, 85, 147, 100)",

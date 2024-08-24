@@ -123,7 +123,7 @@ const data = [
     { key: 'PORTUG', value: 'Portuguese' },
     { key: 'PSCI', value: 'Psychological Science (started 2019 Fall)' },
     { key: 'PSY%20BEH', value: 'Psychology and Social Behavior (until 2019 SS2)' },
-    { key: 'PSYCH', value: 'Cognitive Sciences' },
+    { key: 'PSYCH', value: 'Psychology' },
     { key: 'PUB%20POL', value: 'Public Policy' },
     { key: 'PUBHLTH', value: 'Public Health' },
     { key: 'RADIO', value: 'Radiology' },

@@ -17,6 +17,29 @@ const getClass = async (subject, season, year) => {
     }
 }
 
+const GetCourseInfo = async (className) => {
+    let fullTitle = className.toUpperCase()
+    let data = fullTitle.split(" ")
+    // let couresName = data[0];
+    data = data.map(text => text.replace("/", "%2F").replace("&", "%26"));
+    // couresName = couresName.replace("/", "%2F")
+    // couresName = couresName.replace("&", "%20")
+    const query = data.join("");
+    try {
+        const url = `https://api.peterportal.org/rest/v0/courses/${query}`
+        const response = await fetch(url)
+        if (!response.ok) {
+            // throw new Error('Response was bad in GetCourseInfo');
+            return {description: "", prereqs: "", prereqTree: {}}
+        }
+        const data = await response.json()
+        return {description: data.description, prereqs: data.prerequisite_text, prereqTree: data.prerequisite_tree}
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
 const getClassStatus = (sections) => {
     let classStatus = "FULL"
     if ("Lec" == sections[0].sectionType) {
@@ -42,4 +65,4 @@ const getClassStatus = (sections) => {
     return classStatus
 }
 
-export {getClass, getClassStatus}
+export {getClass, getClassStatus, GetCourseInfo}

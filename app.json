@@ -2,7 +2,7 @@
   "expo": {
     "name": "ZotClass",
     "slug": "ZotClass",
-    "version": "1.0.0",
+    "version": "3.0.0",
     "orientation": "portrait",
     "icon": "./images/icon.png",
     "userInterfaceStyle": "light",
@@ -16,9 +16,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.aniketpx.ZotClass"
+      "bundleIdentifier": "com.aniketpx.ZotClass",
+      "buildNumber": "3"
     },
     "android": {
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

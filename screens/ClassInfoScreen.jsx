@@ -1,18 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, SafeAreaView, TouchableOpacity, Button, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView, TouchableOpacity, Button, Dimensions, Platform } from 'react-native';
 import RenderClassSections from '../components/RenderClassSections';
+import { useSelector } from 'react-redux';
 
-import BackButton from '../components/BackButton';
 const ClassInfoScreen = ({ route }) => {
     const { classInfo } = route.params
     const classTitle = classInfo.courseTitle
     const className = `${classInfo.deptCode} ${classInfo.courseNumber}`
     const classSections = classInfo.sections
+    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
+
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar style="auto" />
+        <SafeAreaView style={[styles.container, { backgroundColor: darkMode ? "black" : "white" }]}>
+            <StatusBar style={darkMode ? 'light' : 'dark'} />
             <RenderClassSections classSections={classSections} className={className} classTitle={classTitle} />
-            <BackButton />
         </SafeAreaView>
     )
 }
@@ -23,5 +24,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        paddingTop: Platform.OS === 'android' ? 40 : 0,
+        paddingBottom: Platform.OS === 'android' ? 10 : 0
     },
 });

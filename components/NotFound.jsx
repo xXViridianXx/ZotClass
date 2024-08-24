@@ -32,5 +32,6 @@ const styles = StyleSheet.create({
         marginTop: 30,
         marginRight: 25,
         marginLeft: 25,
+        borderRadius: 100
     }
 })

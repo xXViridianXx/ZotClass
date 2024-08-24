@@ -1,11 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, SafeAreaView, RefreshControl, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView, RefreshControl, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { getClass } from '../components/getClass';
 import ClassCard from '../components/ClassCard';
 import NotFound from '../components/NotFound';
 import BackButton from '../components/BackButton';
 import { useNavigation } from '@react-navigation/native';
+
+import { useSelector } from 'react-redux';
+
 const ClassesScreen = ({ route }) => {
     const { selected, selectedSeason, selectedYear, buttonPosition } = route.params
     // console.log(selected, selectedSeason, selectedYear)
@@ -14,6 +17,8 @@ const ClassesScreen = ({ route }) => {
     const [numClasses, setNumClasses] = useState(0)
     const [loading, setLoading] = useState(false);
 
+    // const dispatch = useDispatch();
+    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
 
     const retrieve = async (subject, season, year) => {
         try {
@@ -44,8 +49,8 @@ const ClassesScreen = ({ route }) => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar style="auto" />
+        <SafeAreaView style={[styles.container, { backgroundColor: darkMode ? "black" : "white" }]}>
+            <StatusBar style={darkMode ? 'light' : 'dark'} />
             {loading ?
                 (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <ActivityIndicator size="large" />
@@ -58,9 +63,11 @@ const ClassesScreen = ({ route }) => {
                         keyExtractor={(item, index) => index.toString()}
                         ListEmptyComponent={selected && selectedSeason && selectedYear ? NotFound : null}
                     />
+                    <View style={{ display: "flex", justifyContent: "flex-start", paddingTop: 10 }}>
+                        <BackButton />
+                    </View>
                 </View>)
             }
-            <BackButton />
         </SafeAreaView>
     )
 }
@@ -70,8 +77,9 @@ export default ClassesScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
         alignItems: 'center',
         // justifyContent: 'center',
+        paddingTop: Platform.OS === 'android' ? 40 : 0,
+        paddingBottom: Platform.OS === 'android' ? 10 : 0
     },
 });

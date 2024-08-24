@@ -1,18 +1,16 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { Feather } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
+import { Feather, Ionicons} from '@expo/vector-icons';
 
-const BackButton = () => {
+const MoreInfoButton = ({to, data}) => {
     const navigation = useNavigation()
-    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
     return (
         <View style={styles.containerStyles}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => navigation.navigate(to, data)}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
                     <View>
-                        <Feather name="arrow-left-circle" size={35} color="white" />
+                        <Ionicons name="information-circle-outline" size={35} color="white" />
                     </View>
                 </View>
             </TouchableOpacity>
@@ -21,7 +19,7 @@ const BackButton = () => {
 }
 
 
-export default BackButton
+export default MoreInfoButton
 
 const styles = StyleSheet.create({
     containerStyles: {
