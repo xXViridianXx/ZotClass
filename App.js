@@ -3,6 +3,8 @@
 import HomeScreen from './screens/HomeScreen';
 import ClassInfoScreen from './screens/ClassInfoScreen';
 import ClassesScreen from './screens/ClassesScreen';
+import SignUpScreen from './screens/SignUpScreen';
+import LoginScreen from './screens/LoginScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ClassMoreInfoScreen from './screens/ClassMoreInfoScreen';
@@ -14,6 +16,8 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
           <Stack.Screen name="ClassInfoScreen" component={ClassInfoScreen} options={{ headerShown: false }} />
           <Stack.Screen name="ClassesScreen" component={ClassesScreen} options={{ headerShown: false }} />
