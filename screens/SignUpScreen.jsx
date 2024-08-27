@@ -3,7 +3,7 @@ import React, { useState, useLayoutEffect, useEffect } from 'react'
 import LoginInputs from '../components/LoginInputs'
 // import { signUp, create} from '../components/Helpers'
 // import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
-
+import { signUp } from '../DatabaseHelpers/Authentication'
 
 
 const SignUpScreen = ({ navigation }) => {
@@ -17,6 +17,13 @@ const SignUpScreen = ({ navigation }) => {
         Keyboard.dismiss();
     };
 
+    const handleSignUp = async () => {
+        const valid = signUp(email, password, confirmPassword, username)
+
+        if (valid) [
+            navigation.navigate("Home")
+        ]
+    }
     return (
 
 
@@ -45,7 +52,7 @@ const SignUpScreen = ({ navigation }) => {
                 <View
                     style={styles.buttonContainer}
                 >
-                    <TouchableOpacity onPress={() => { navigation.navigate('Home') }} style={styles.button}>
+                    <TouchableOpacity onPress={() => { handleSignUp() }} style={styles.button}>
                         <Text style={styles.buttonText}>Lets Go</Text>
                     </TouchableOpacity>
 

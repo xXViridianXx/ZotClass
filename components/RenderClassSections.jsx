@@ -7,7 +7,8 @@ import BackButton from './BackButton'
 import { useSelector } from 'react-redux';
 
 
-const RenderClassSections = ({ classSections, className, classTitle }) => {
+const RenderClassSections = ({ classSections, className, classTitle, subject, quarter, year }) => {
+    console.log(subject, quarter, year)
     const name = className
     const title = classTitle
     const [courseInfo, setCourseInfo] = useState('');
@@ -31,7 +32,7 @@ const RenderClassSections = ({ classSections, className, classTitle }) => {
 
 
     const renderSection = ({ item, multiStaff }) => {
-        return (<SectionCard section={item} />)
+        return (<SectionCard section={item} subject={subject} quarter={quarter} year={year} name={name} title={title} />)
     }
 
     return (
@@ -43,8 +44,8 @@ const RenderClassSections = ({ classSections, className, classTitle }) => {
                 :
                 <View style={[styles.block, { backgroundColor: darkMode ? "black" : "white" }]}>
                     <View style={styles.classContainer}>
-                        <Text style={[styles.className, {color: darkMode ? "white" : "#011627"}]}>{name}</Text>
-                        <Text style={[styles.classTitle, {color: darkMode ? "white" : "#011627"}]}>{title}</Text>
+                        <Text style={[styles.className, { color: darkMode ? "white" : "#011627" }]}>{name}</Text>
+                        <Text style={[styles.classTitle, { color: darkMode ? "white" : "#011627" }]}>{title}</Text>
                         <View style={{ marginTop: 10, marginBottom: 5, padding: 10, backgroundColor: "#011627", borderRadius: 5 }}>
                             <Text style={styles.classDescription}>{courseInfo}</Text>
                         </View>

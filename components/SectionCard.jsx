@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useState } from 'react'
 import StatusColor from './StatusColor'
 import { useSelector } from 'react-redux';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { addClass, deleteClass } from '../DatabaseHelpers/StudyPlan';
+const SectionCard = React.memo(({ section, name, title, subject, quarter, year }) => {
 
-const SectionCard = React.memo(({ section }) => {
-    // console.log(section)
     const finalExam = section.finalExam
     const maxCapacity = section.maxCapacity
     let staff = new Set(section.instructors);
     staff = [...staff]
-    // const sectionEnrolled = section.numCurrentlyEnrolled.sectionEnrolled
     const totalEnrolled = section.numCurrentlyEnrolled.totalEnrolled
     const numOnWaitlist = section.numOnWaitlist
     const numRequested = section.numRequested
@@ -24,11 +24,67 @@ const SectionCard = React.memo(({ section }) => {
 
     const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
 
+    const [addedClass, setAddedClass] = useState(false)
+    const [removedClass, setRemovedClass] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    const classData = {
+        className: name,
+        classTitle: title,
+        sectionType: sectionType,
+        sectionNumber: sectionNum,
+        sectionCode: sectionCode,
+        subject: subject,
+        quarter: quarter,
+        year: year,
+    }
+
+    const handleAddClass = async () => {
+        setLoading(true)
+        try {
+            await addClass("234567876fd", classData);
+            setAddedClass(true)
+            setRemovedClass(false)
+            console.log("Class added successfully");
+        } catch (error) {
+            console.error("Error adding class: ", error);
+        }
+        setLoading(false)
+    }
+
+    const handleRemoveClass = async () => {
+        setLoading(true)
+        try {
+            await deleteClass("234567876fd", sectionCode);
+            setAddedClass(false)
+            setRemovedClass(true)
+            console.log("Class added successfully");
+        } catch (error) {
+            console.error("Error adding class: ", error);
+        }
+        setLoading(false)
+    }
+
     const renderStaff = () => {
         filteredStaff = Array.from(staff).map((item) => <Text key={item} style={{ fontWeight: 800, color: darkMode ? "white" : "#011627" }}>{item}</Text>)
         return (
-            <View style={{ width: "45%", padding: 10, borderLeftWidth: 3, borderColor: "rgba( 50, 85, 147, 1)" }}>
-                {filteredStaff}
+            <View style={{ width: "100%", padding: 10, borderLeftWidth: 3, borderColor: "rgba( 50, 85, 147, 1)", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                <View>
+                    {filteredStaff}
+                </View>
+                {loading ? (
+                    <ActivityIndicator color="#e5e5e5" size={30} /> // Loading Indicator
+                ) : (
+                    !addedClass ? (
+                        <TouchableOpacity onPress={handleAddClass}>
+                            <AntDesign name="pluscircle" size={30} color="rgba(50, 85, 147, 1)" />
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity onPress={handleRemoveClass}>
+                            <AntDesign name="minuscircle" size={30} color="#ff5a5f" />
+                        </TouchableOpacity>
+                    )
+                )}
             </View>
         )
     };

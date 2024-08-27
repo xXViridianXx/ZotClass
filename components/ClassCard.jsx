@@ -4,12 +4,13 @@ import { useNavigation } from '@react-navigation/native'
 import StatusColor from './StatusColor'
 import { getClassStatus } from './getClass'
 
-const ClassCard = React.memo(({ item }) => {
+const ClassCard = React.memo(({ item, subject, quarter, year }) => {
+
     const navigation = useNavigation()
     const sections = item.sections
     const classStatus = getClassStatus(sections)
     return (
-        <TouchableOpacity style={[styles.cardContainer, { borderColor: StatusColor(classStatus) }]} onPress={() => navigation.navigate("ClassInfoScreen", { classInfo: item })}>
+        <TouchableOpacity style={[styles.cardContainer, { borderColor: StatusColor(classStatus) }]} onPress={() => navigation.navigate("ClassInfoScreen", { classInfo: item, subject: subject, quarter: quarter, year: year })}>
             <View>
                 <Text style={{ color: "white", fontWeight: 700, fontSize: 25 }}>{item.deptCode} {item.courseNumber}</Text>
                 <Text style={{ color: "white", fontWeight: 800 }}>{item.courseTitle}</Text>

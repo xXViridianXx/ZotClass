@@ -45,7 +45,7 @@ const ClassesScreen = ({ route }) => {
     }, [])
 
     const renderClass = ({ item }) => {
-        return (<ClassCard item={item} />)
+        return (<ClassCard item={item} subject={selected} quarter={selectedSeason} year={selectedYear} />)
     }
 
     return (
