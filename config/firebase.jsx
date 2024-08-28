@@ -19,15 +19,6 @@ import {
 } from '@env';
 // Your web app's Firebase configuration
 
-// const firebaseConfig = {
-//     apiKey: "AIzaSyCa-cuWj51slzH6yJInNf-QnLdZN6UmV5o",
-//     authDomain: "zotclass-61e64.firebaseapp.com",
-//     projectId: "zotclass-61e64",
-//     storageBucket: "zotclass-61e64.appspot.com",
-//     messagingSenderId: "379800374866",
-//     appId: "1:379800374866:web:724986016bea02ef97998b"
-// };
-
 const firebaseConfig = {
     apiKey: FIREBASE_API_KEY,
     authDomain: FIREBASE_AUTH_DOMAIN,
