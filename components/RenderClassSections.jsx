@@ -15,7 +15,7 @@ const RenderClassSections = ({ classSections, className, classTitle, subject, qu
     const [prereqs, setPrereqs] = useState('');
     const [loading, setLoading] = useState(true)
 
-    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
+    const darkMode = useSelector((state) => state.currentUser.darkMode);
 
     let staff = new Set(classSections[0].instructors);
     staff = [...staff]

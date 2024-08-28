@@ -1,9 +1,9 @@
 // store/index.js
 import { configureStore } from '@reduxjs/toolkit';
-import { toggleDarkModeSlice } from '../reducers/user';
+import { currentUserSlice } from '../reducers/user';
 const store = configureStore({
     reducer: {
-        toggleDarkMode: toggleDarkModeSlice.reducer,
+        currentUser: currentUserSlice.reducer,
     },
 });
 

@@ -4,32 +4,28 @@ import LoginInputs from '../components/LoginInputs'
 // import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 // import { initializeApp } from 'firebase/app'
 // import { firebaseConfig } from '../firebaseConfig'
-// import { signIn } from '../components/Helpers'
-
-
+import { signIn } from '../DatabaseHelpers/Authentication'
+import { useDispatch } from 'react-redux'
 // linking firebase
 // initializeApp(firebaseConfig)
 
 const LoginScreen = ({ navigation }) => {
-
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
-    // useEffect(() => {
-    //   const auth = getAuth()
-    //   onAuthStateChanged(auth, (user) => {
-
-    //     // console.log(user.email)
-    //     if (user) {
-    //       navigation.replace('Home')
-    //     }
-    //   })
-    // })
 
     const dismissKeyboard = () => {
         Keyboard.dismiss();
     };
 
+    const handleSignIn = async () => {
+        const valid = await signIn(email, password, dispatch)
+        if (valid) {
+            setTimeout(() => {
+                navigation.navigate("Home");
+            }, 100);
+        }
+    }
 
     return (
 
@@ -56,7 +52,7 @@ const LoginScreen = ({ navigation }) => {
                     <LoginInputs labelText={'Email'} input={email} setInput={setEmail} style={styles.input} color={'#1c4375'} boardType='email-address' secure={false} />
                     <LoginInputs labelText={'Password'} input={password} setInput={setPassword} style={styles.input} color={'#1c4375'} boardType='default' secure={true} />
 
-                    <TouchableOpacity onPress={() => { }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate("ForgotPasswordScreen") }}>
                         <Text style={{ color: '#FFF', fontWeight: 500, padding: 8, fontSize: 12 }}>Forgot Password</Text>
                     </TouchableOpacity>
                 </View>
@@ -64,7 +60,7 @@ const LoginScreen = ({ navigation }) => {
                 <View
                     style={styles.buttonContainer}
                 >
-                    <TouchableOpacity onPress={() => { navigation.navigate('Home') }} style={styles.button}>
+                    <TouchableOpacity onPress={() => { handleSignIn() }} style={styles.button}>
                         <Text style={styles.buttonText}>Sign in</Text>
                     </TouchableOpacity>
 

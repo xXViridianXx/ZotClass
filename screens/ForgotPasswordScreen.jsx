@@ -1,31 +1,33 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native'
-import React, { useState, useLayoutEffect, useEffect } from 'react'
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Button, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import LoginInputs from '../components/LoginInputs'
-// import { signUp, create} from '../components/Helpers'
-// import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
-import { signUp } from '../DatabaseHelpers/Authentication'
+
+import { signIn } from '../DatabaseHelpers/Authentication'
 import { useDispatch } from 'react-redux'
+import { resetPassword } from '../DatabaseHelpers/Authentication'
 
-const SignUpScreen = ({ navigation }) => {
-    const dispatch = useDispatch()
+const ForgotPasswordScreen = ({ navigation }) => {
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [username, setUsername] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-
+    const [sentResentLink, setSentResetLink] = useState(false)
     const dismissKeyboard = () => {
         Keyboard.dismiss();
     };
 
-    const handleSignUp = async () => {
-        const valid = await signUp(email, password, confirmPassword, dispatch)
-        if (valid) {
-            setTimeout(() => {
-                navigation.navigate("Home");
-            }, 100);
+    const handleReset = async () => {
+        try {
+            setSentResetLink(false)
+            const valid = await resetPassword(email)
+            if (valid) {
+                setSentResetLink(true)
+            }
+        } catch (error) {
+            console.log("error resetting email")
         }
     }
+
     return (
+
+
 
 
         // keyboard won't cover input fields
@@ -40,29 +42,24 @@ const SignUpScreen = ({ navigation }) => {
                 </View>
 
                 <View style={styles.introContainer}>
-                    <Text style={styles.introText}>Welcome Aboard</Text>
+                    <Text style={styles.introText}>Lost In Aldrich?</Text>
                 </View>
 
                 <View style={styles.inputContainer}>
-                    {/* <LoginInputs labelText={'Username'} input={username} setInput={setUsername} style={styles.input} color={'#1c4375'} boardType='default' secure={false} /> */}
+                    {sentResentLink ? <Text style={{color: "white", fontWeight: "bold", fontSize: 13}}>Check Your Email for a Reset Link</Text> : null}
                     <LoginInputs labelText={'Email'} input={email} setInput={setEmail} style={styles.input} color={'#1c4375'} boardType='email-address' secure={false} />
-                    <LoginInputs labelText={'Password'} input={password} setInput={setPassword} style={styles.input} color={'#1c4375'} boardType='default' secure={true} />
-                    <LoginInputs labelText={'Confirm Password'} input={confirmPassword} setInput={setConfirmPassword} style={styles.input} color={'#1c4375'} boardType='default' secure={true} />
                 </View>
 
                 <View
                     style={styles.buttonContainer}
                 >
-                    <TouchableOpacity onPress={() => { handleSignUp() }} style={styles.button}>
-                        <Text style={styles.buttonText}>Lets Go</Text>
+                    <TouchableOpacity onPress={() => { handleReset() }} style={styles.button}>
+                        <Text style={styles.buttonText}>Reset</Text>
                     </TouchableOpacity>
 
-                    <View style={styles.signUpContainer}>
-                        <Text style={{ color: '#FFF', fontSize: 12, fontWeight: 500 }}>Already Have An Account?</Text>
-                        <TouchableOpacity onPress={() => { navigation.navigate('LoginScreen') }}>
-                            <Text style={styles.buttonOutlineText}> Sign In</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.button}>
+                        <Text style={styles.buttonText}>Back To Login</Text>
+                    </TouchableOpacity>
 
                 </View>
             </KeyboardAvoidingView>
@@ -71,7 +68,7 @@ const SignUpScreen = ({ navigation }) => {
     )
 }
 
-export default SignUpScreen
+export default ForgotPasswordScreen
 
 const styles = StyleSheet.create({
     container: {
@@ -117,7 +114,6 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: '70%',
-
     },
     buttonContainer: {
         width: '70%',
@@ -128,7 +124,6 @@ const styles = StyleSheet.create({
     button: {
         width: '100%',
         backgroundColor: '#1c4375',
-        color: '#FFF',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
@@ -137,15 +132,11 @@ const styles = StyleSheet.create({
     buttonText: {
         fontWeight: 'bold',
         fontSize: 16,
-        color: '#e5e5e5'
-    },
-    buttonOutline: {
-        backgroundColor: '#E63946',
+        color: '#FFF'
     },
     buttonOutlineText: {
         fontWeight: '500',
         fontSize: 14,
         color: '#FFF'
-
     }
 })

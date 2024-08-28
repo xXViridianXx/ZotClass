@@ -18,7 +18,7 @@ const ClassesScreen = ({ route }) => {
     const [loading, setLoading] = useState(false);
 
     // const dispatch = useDispatch();
-    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
+    const darkMode = useSelector((state) => state.currentUser.darkMode);
 
     const retrieve = async (subject, season, year) => {
         try {

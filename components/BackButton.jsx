@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 const BackButton = () => {
     const navigation = useNavigation()
-    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
+    const darkMode = useSelector((state) => state.currentUser.darkMode);
     return (
         <View style={styles.containerStyles}>
             <TouchableOpacity onPress={() => navigation.goBack()}>

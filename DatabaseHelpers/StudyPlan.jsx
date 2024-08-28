@@ -32,6 +32,7 @@ const addClass = async (uid, classData) => {
 
 }
 
+// deletes a class from user study plan
 const deleteClass = async (uid, sectionCode) => {
     const userStudyPlan = collection(db, uid)
     const q = query(userStudyPlan, where("sectionCode", "==", sectionCode));

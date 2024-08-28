@@ -22,7 +22,8 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
     const location = meetings.bldg, days = meetings.days
     const time = meetings.time
 
-    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
+    const darkMode = useSelector((state) => state.currentUser.darkMode);
+    const uid = useSelector((state) => state.currentUser.uid);
 
     const [addedClass, setAddedClass] = useState(false)
     const [removedClass, setRemovedClass] = useState(false)
@@ -40,9 +41,10 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
     }
 
     const handleAddClass = async () => {
+        console.log("uid: " + uid)
         setLoading(true)
         try {
-            await addClass("234567876fd", classData);
+            await addClass(uid, classData);
             setAddedClass(true)
             setRemovedClass(false)
             console.log("Class added successfully");
@@ -55,7 +57,7 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
     const handleRemoveClass = async () => {
         setLoading(true)
         try {
-            await deleteClass("234567876fd", sectionCode);
+            await deleteClass(uid, sectionCode);
             setAddedClass(false)
             setRemovedClass(true)
             console.log("Class added successfully");

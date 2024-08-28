@@ -8,7 +8,7 @@ const ClassInfoScreen = ({ route }) => {
     const classTitle = classInfo.courseTitle
     const className = `${classInfo.deptCode} ${classInfo.courseNumber}`
     const classSections = classInfo.sections
-    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
+    const darkMode = useSelector((state) => state.currentUser.darkMode);
 
 
     return (
