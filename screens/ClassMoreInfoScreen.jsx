@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 const ClassMoreInfoScreen = ({ route }) => {
     const { className, classTitle, classPrereqs } = route.params;
-    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
+    const darkMode = useSelector((state) => state.currentUser.darkMode);
     return (
         <SafeAreaView style={[styles.block, { backgroundColor: darkMode ? "#011627" : "#white" }]}>
             <View style={[styles.block, { backgroundColor: darkMode ? "black" : "#white" }]}>

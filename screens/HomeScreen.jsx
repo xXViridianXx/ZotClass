@@ -5,8 +5,10 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { useNavigation } from '@react-navigation/native'
 import { data, seasons, years } from '../components/Subjects';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadDarkMode, toggleDarkMode } from '../redux/reducers/user';
+import { loadDarkMode, toggleDarkMode, clearUserID } from '../redux/reducers/user';
+import { signOut, getAuth } from 'firebase/auth';
 const ClassesScreen = () => {
     const navigation = useNavigation();
     const [selected, setSelected] = useState("")
@@ -16,7 +18,7 @@ const ClassesScreen = () => {
     // const [darkMode, setDarkMode] = useState(false)
 
     const dispatch = useDispatch();
-    const darkMode = useSelector((state) => state.toggleDarkMode.darkMode);
+    const darkMode = useSelector((state) => state.currentUser.darkMode);
 
     useEffect(() => {
         dispatch(loadDarkMode());
@@ -37,9 +39,19 @@ const ClassesScreen = () => {
         return darkMode ? darkThemeColor : lightThemeColor
     }
 
-    // const toggleDarkMode = () => {
-    //     setDarkMode(prevMode => !prevMode)
-    // }
+    const logout = async () => {
+        console.log('logging out')
+        try {
+            await signOut(getAuth())
+            dispatch(clearUserID())
+            setTimeout(() => {
+                navigation.navigate("LoginScreen");
+            }, 100);
+        } catch (error) {
+            console.log("failed to logout: ", error)
+        }
+
+    }
     useEffect(() => {
         const { width, height } = Dimensions.get('window');
         const buttonWidth = 50; // Adjust button width as needed
@@ -47,14 +59,20 @@ const ClassesScreen = () => {
         setButtonPosition({ left });
     }, []);
 
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <SafeAreaView style={[styles.container, { backgroundColor: dynamicStyle(darkMode, "black", "white") }]}>
-                <View style={{ width: '80%' }}>
+                <View style={{ width: '80%', display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                     <TouchableOpacity onPress={handleToggle}
                         style={{ padding: 10, borderRadius: 5, alignSelf: 'flex-start', backgroundColor: darkMode ? "#011627" : "rgba( 50, 85, 147, 100)" }}
                         activeOpacity={1}>
                         <Ionicons name="moon" size={25} color="white" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={logout}
+                        style={{ padding: 10, borderRadius: 5, alignSelf: 'flex-start', backgroundColor: darkMode ? "#011627" : "rgba( 50, 85, 147, 100)" }}>
+                        <MaterialIcons name="logout" size={25} color="white" />
                     </TouchableOpacity>
                 </View>
                 <KeyboardAvoidingView
