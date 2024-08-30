@@ -1,7 +1,5 @@
 import { db } from "../config/firebase";
 import { addDoc, deleteDoc, collection, getDoc, query, where, getDocs, doc } from "firebase/firestore";
-
-
 // classData = {
 //     className: COMPSCI 121
 //     classTitle: Info Retrieval

@@ -4,7 +4,7 @@ import RenderClassSections from '../components/RenderClassSections';
 import { useSelector } from 'react-redux';
 
 const ClassInfoScreen = ({ route }) => {
-    const { classInfo, subject, quarter, year} = route.params
+    const { classInfo, subject, quarter, year } = route.params
     const classTitle = classInfo.courseTitle
     const className = `${classInfo.deptCode} ${classInfo.courseNumber}`
     const classSections = classInfo.sections
