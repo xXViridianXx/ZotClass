@@ -3,13 +3,14 @@ import { View, Text, StyleSheet, FlatList, ScrollView, Dimensions } from 'react-
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TimeSlots from './TimeSlots';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-
+import { schedule } from '../components/DummyData';
+import { useDispatch, useSelector } from 'react-redux';
 // Example data
 
 
 const App = () => {
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-
+    const schedule = useSelector((state) => state.currentUser.schedule);
     // const itemsByDay = daysOfWeek.reduce((acc, day) => {
     //     acc[day] = StudyPlanData.filter(item => item.days.includes(day[0]));
     //     return acc;
@@ -29,7 +30,7 @@ const App = () => {
                             showsVerticalScrollIndicator={false}
                             contentContainerStyle={styles.flatListContainer}
                         /> */}
-                        <TimeSlots />
+                        <TimeSlots classData={schedule[index]} />
                     </View>
                 ))}
             </ScrollView>

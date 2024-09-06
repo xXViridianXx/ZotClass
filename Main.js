@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import LoadingScreen from './screens/LoadingScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-
+import AntDesign from '@expo/vector-icons/AntDesign';
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator()
 export default function Main() {
@@ -46,7 +46,7 @@ export default function Main() {
                 }}>
                 <Tabs.Screen name="TimeTableScreen" component={TimeTable} options={{
                     headerShown: false, tabBarIcon: ({ focused }) => (
-                        <FontAwesome name="list-ul" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
+                        <AntDesign name="calendar" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
                     )
                 }} />
                 <Tabs.Screen name="SearchScreen" component={HomeScreen} options={{

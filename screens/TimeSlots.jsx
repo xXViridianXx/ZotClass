@@ -1,6 +1,8 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
-
+import { schedule } from '../components/DummyData'
+import { useDispatch } from 'react-redux'
+import { removeClassFromDay } from '../redux/reducers/user'
 // startTime (exclusive), endtime {inclusive}, step (minutes)
 const generateTimeSlots = (startTime, endTime, step) => {
     const times = []
@@ -22,10 +24,27 @@ const generateTimeSlots = (startTime, endTime, step) => {
     return times
 }
 
-const TimeSlots = () => {
+const addClassToTimeTable = (startHour, startMinutes) => {
+    const scaledMinutes = (startHour - 8) * 60
+    const convertToRender = (scaledMinutes + startMinutes)
+    const offset = 15
+    return offset + convertToRender
+}
 
-    
-    timeSlots = generateTimeSlots(5, 22, 30)
+
+const TimeSlots = ({ classData }) => {
+    const dispatch = useDispatch()
+    if (classData) {
+        for (let i of classData) {
+            console.log(i)
+        }
+    }
+
+    const removeClassFromTimetable = (code) => {
+        dispatch(removeClassFromDay(code));
+    }
+
+    timeSlots = generateTimeSlots(7, 20, 30)
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={{ marginBottom: 10 }}>
@@ -37,15 +56,29 @@ const TimeSlots = () => {
                     </View>
                 ))}
             </View>
-            {/* offset for top: 30, step: 60 */}
-            <View style={[styles.schedule, { top: 30, height: 110, }]}>
-                <Text style={styles.scheduleText}>COMPSCI 121</Text>
-                <Text style={styles.scheduleText}>DBH 1100</Text>
-                <Text style={styles.scheduleText}>6-7p</Text>
-            </View>
-            <View style={[styles.schedule2, { top: 240, height: 90 }]}>
-                <Text style={styles.scheduleText}>COMPSCI 161</Text>
-            </View>
+            {classData.map((classInfo, index) => (
+                <TouchableOpacity onLongPress={() => {
+                    Alert.alert(
+                        'Deleting Class',
+                        `Are you sure you want to delete \n ${classInfo.className}`,
+                        [
+                            { text: 'Cancel', onPress: () => null },
+                            { text: 'Delete', style: 'destructive', onPress: () => removeClassFromTimetable(classInfo.sectionCode) },
+                        ]
+                    )
+                }}
+                    key={classInfo.sectionCode} style={[
+                        styles.schedule,
+                        {
+                            top: addClassToTimeTable(classInfo.startHour, classInfo.startMinutes),
+                            height: classInfo.duration,
+                            backgroundColor: classInfo.color
+                        }]}>
+                    <Text style={styles.scheduleText}>{classInfo.className}</Text>
+                    <Text style={styles.scheduleText}>{classInfo.classLocation}</Text>
+                    <Text style={styles.scheduleText}>{classInfo.time}</Text>
+                </TouchableOpacity>
+            ))}
         </ScrollView>
     )
 }
@@ -59,7 +92,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     timeSlot: {
-        height: 60,
+        height: 30,
         justifyContent: 'center',
         position: 'relative',
     },
@@ -87,7 +120,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 70,
         right: 0,
-        backgroundColor: 'rgba(0, 0, 0, .5)',
+
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',

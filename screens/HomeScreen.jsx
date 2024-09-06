@@ -134,6 +134,7 @@ const ClassesScreen = () => {
                         onPress={() => {
                             if (selected && selectedSeason && selectedYear) {
                                 navigation.navigate("ClassesScreen", { selected, selectedSeason, selectedYear, buttonPosition });
+                                Keyboard.dismiss()
                             } else {
                                 alert("Please fill out all fields");
                             }

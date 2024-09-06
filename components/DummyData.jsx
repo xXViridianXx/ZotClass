@@ -9,80 +9,21 @@
 //     year: 2024
 // }
 
-export const StudyPlanData = [
-    {
-        className: "COMPSCI 121",
-        classTitle: "Info Retrieval",
-        sectionType: "Lec",
-        sectionNumber: "A",
-        sectionCode: "34040",
-        location: "DBH 1100",
-        time: "2:00- 2:50p",
-        days: "MWF",
-        subject: "COMPSCI",
-        season: "Fall",
-        year: "2024",
+// export const StudyPlanData = [
 
-    },
-    {
-        className: "COMPSCI 121",
-        classTitle: "Info Retrieval",
-        sectionType: "Dis",
-        sectionNumber: "1",
-        sectionCode: "34041",
-        location: "ICS 180",
-        time: "2:00- 2:50p",
-        days: "Th",
-        subject: "COMPSCI",
-        season: "Fall",
-        year: "2024",
+// ]
 
-    },
-    {
-        className: "COMPSCI 121",
-        classTitle: "Info Retrieval",
-        sectionType: "Dis",
-        sectionNumber: "2",
-        sectionCode: "34042",
-        location: "ICS 180",
-        time: "3:00- 3:50p",
-        days: "Th",
-        subject: "COMPSCI",
-        season: "Fall",
-        year: "2024",
-
-    }
-]
-
-const schedule = {
+export const schedule = {
     "M": [
-        {
-            className: "class 1",
-            classTitle: "class name 1",
-            location: "location 1",
-            startTime: "2:00",
-            endTime: "2:50p"
-        }
+        { "className": "COMPSCI 121", "classTitle": "INFRMTION RETRIEVAL", "color": "rgba(97, 100, 100, .5)", "days": ["M", "W", "F"], "duration": 50, "endHour": 14, "endMinutes": 50, "quarter": "Fall", "sectionCode": "34040", "sectionNumber": "A", "sectionType": "Lec", "startHour": 14, "startMinutes": 0, "subject": "COMPSCI", "time": " 2:00- 2:50p", "year": "2024" }
     ],
     "Tu": [],
     "W": [
-        {
-            className: "class 1",
-            classTitle: "class name 1",
-            location: "location 1",
-            startTime: "2:00",
-            endTime: "2:50p"
-        }
+        { "className": "COMPSCI 121", "classTitle": "INFRMTION RETRIEVAL", "color": "rgba(97, 100, 100, .5)", "days": ["M", "W", "F"], "duration": 50, "endHour": 14, "endMinutes": 50, "quarter": "Fall", "sectionCode": "34040", "sectionNumber": "A", "sectionType": "Lec", "startHour": 14, "startMinutes": 0, "subject": "COMPSCI", "time": " 2:00- 2:50p", "year": "2024" }
     ],
     "Th": [],
     "F": [
-        {
-            className: "class 1",
-            classTitle: "class name 1",
-            location: "location 1",
-            startTime: "2:00",
-            endTime: "2:50p"
-        }
+        { "className": "COMPSCI 121", "classTitle": "INFRMTION RETRIEVAL", "color": "rgba(97, 100, 100, .5)", "days": ["M", "W", "F"], "duration": 50, "endHour": 14, "endMinutes": 50, "quarter": "Fall", "sectionCode": "34040", "sectionNumber": "A", "sectionType": "Lec", "startHour": 14, "startMinutes": 0, "subject": "COMPSCI", "time": " 2:00- 2:50p", "year": "2024" }
     ],
 
 }

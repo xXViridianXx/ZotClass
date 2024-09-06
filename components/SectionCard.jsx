@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import StatusColor from './StatusColor'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { addClass, deleteClass } from '../DatabaseHelpers/StudyPlan';
+import { addClassToDay } from '../redux/reducers/user';
 const SectionCard = React.memo(({ section, name, title, subject, quarter, year }) => {
 
     const finalExam = section.finalExam
@@ -29,25 +30,46 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
     const [removedClass, setRemovedClass] = useState(false)
     const [loading, setLoading] = useState(false)
 
+
     const classData = {
         className: name,
         classTitle: title,
         sectionType: sectionType,
         sectionNumber: sectionNum,
         sectionCode: sectionCode,
+        classLocation: location,
+        days: days,
+        time: time,
         subject: subject,
         quarter: quarter,
         year: year,
     }
+    const dispatch = useDispatch()
+
+    const filterClass = (newClass) => {
+        if (newClass.days == []) return
+
+
+        // const schedule = useSelector((state) => state.currentUser.schedule);
+        newClass.days.forEach(day => {
+            if (day === "M") dispatch(addClassToDay({ index: 0, newClass }));
+            if (day === "Tu") dispatch(addClassToDay({ index: 1, newClass }));
+            if (day === "W") dispatch(addClassToDay({ index: 2, newClass }));
+            if (day === "Th") dispatch(addClassToDay({ index: 3, newClass }));
+            if (day === "F") dispatch(addClassToDay({ index: 4, newClass }));
+        });
+
+    };
 
     const handleAddClass = async () => {
-        console.log("uid: " + uid)
         setLoading(true)
         try {
-            await addClass(uid, classData);
+            const updatedClassData = await addClass(uid, classData)
             setAddedClass(true)
             setRemovedClass(false)
             console.log("Class added successfully");
+            filterClass(updatedClassData)
+
         } catch (error) {
             console.error("Error adding class: ", error);
         }

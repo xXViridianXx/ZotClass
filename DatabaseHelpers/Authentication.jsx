@@ -117,5 +117,4 @@ const signUp = async (email, password, confirmPassword, dispatch) => {
     showToast('Enter Missing Fields')
     return false
 }
-
 export { signIn, signUp, resetPassword }
