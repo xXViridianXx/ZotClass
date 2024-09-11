@@ -87,6 +87,11 @@ export default function Main() {
                         <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="Home" component={ZotClassTabs} options={{ headerShown: false }} />
+                        <Stack.Screen name="ClassInfoScreen" component={ClassInfoScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="ClassesScreen" component={ClassesScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="ClassesMoreInfoScreen" component={ClassMoreInfoScreen} options={{ headerShown: false }} />
+
                     </>
                 )}
             </Stack.Navigator>

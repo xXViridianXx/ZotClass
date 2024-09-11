@@ -63,7 +63,7 @@ const ClassesScreen = ({ route }) => {
                         showsVerticalScrollIndicator={false}
                         data={classData} renderItem={renderClass}
                         keyExtractor={(item, index) => index.toString()}
-                        ListEmptyComponent={selected && selectedSeason && selectedYear ? NotFound : null}
+                        ListEmptyComponent={selected && selectedSeason && selectedYear ? NotFound("Sorry, we couldn't find that...") : null}
                     />
                     <View style={{ display: "flex", justifyContent: "flex-start", paddingTop: 10 }}>
                         <BackButton />

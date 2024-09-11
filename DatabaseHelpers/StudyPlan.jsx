@@ -76,9 +76,9 @@ const randomColor = (min, max) => {
 }
 
 const colorGenerator = () => {
-    const r = randomColor(0, 255)
-    const g = randomColor(0, 255)
-    const b = randomColor(0, 255)
+    const r = randomColor(0, 100)
+    const g = randomColor(0, 100)
+    const b = randomColor(0, 100)
     return `rgba(${r}, ${g}, ${b}, .5)`
 }
 const getDays = (dayString) => {
@@ -157,6 +157,7 @@ const fetchStudyPlan = async (uid) => {
         snapShot.forEach((doc) => {
             studyPlan.push(doc.data())
         });
+        
         return studyPlan
     } catch (error) {
         console.log("Error fetching study plan", error);

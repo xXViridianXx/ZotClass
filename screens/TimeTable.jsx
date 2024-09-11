@@ -6,6 +6,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 import { schedule } from '../components/DummyData';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterClass } from '../DatabaseHelpers/StudyPlan';
+import { StatusBar } from 'expo-status-bar';
 // Example data
 
 
@@ -17,18 +18,7 @@ const TimeTable = () => {
 
     const uid = useSelector((state) => state.currentUser.uid);
     const studyPlan = useSelector((state) => state.currentUser.studyPlan);
-    // const schedule = useSelector((state) => state.currentUser.schedule);
-
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         sortClasses();
-    //     }, 100);
-
-    // }, [studyPlan]);
-
-    // const sortClasses = async () => {
-    //     await Promise.all(studyPlan.map((classObj) => filterClass(classObj, dispatch)));
-    // }
+    const darkMode = useSelector((state) => state.currentUser.darkMode);
 
     const schedule = [[], [], [], [], [], []]
     studyPlan.forEach((classObj) => {
@@ -44,11 +34,13 @@ const TimeTable = () => {
 
     console.log("schedule", schedule)
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: darkMode ? "black" : "white"}]}>
+            <StatusBar style={darkMode ? 'light' : 'dark'} />
+
             <ScrollView horizontal pagingEnabled >
                 {daysOfWeek.map((day, index) => (
                     <View key={index} style={styles.rowContainer}>
-                        <View style={styles.dayContainer}>
+                        <View style={[styles.dayContainer, {backgroundColor: darkMode ? "#011627" : "rgba(50, 85, 147, 100)"}]}>
                             <Text style={styles.dayText}>{day}</Text>
                         </View>
                         <TimeSlots classData={schedule[index]} uid={uid} />
@@ -74,7 +66,6 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "rgba(50, 85, 147, 100)",
         borderRadius: 5,
     },
     dayText: {

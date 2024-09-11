@@ -69,7 +69,6 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
             const updatedClassData = await addClass(uid, classData)
             setAddedClass(true)
             setRemovedClass(false)
-            console.log("Class added successfully", updatedClassData);
             if (updatedClassData != -1) {
                 // filterClass(updatedClassData, dispatch)
                 console.log("adding to study plan")
@@ -103,19 +102,21 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
                 <View>
                     {filteredStaff}
                 </View>
-                {loading ? (
-                    <ActivityIndicator color="#e5e5e5" size={30} /> // Loading Indicator
-                ) : (
-                    !addedClass ? (
-                        <TouchableOpacity onPress={handleAddClass}>
-                            <AntDesign name="pluscircle" size={30} color="rgba(50, 85, 147, 1)" />
-                        </TouchableOpacity>
+                {uid ? (
+                    loading ? (
+                        <ActivityIndicator color="#e5e5e5" size={30} /> // Loading Indicator
                     ) : (
-                        <TouchableOpacity onPress={handleRemoveClass}>
-                            <AntDesign name="minuscircle" size={30} color="#ff5a5f" />
-                        </TouchableOpacity>
+                        !addedClass ? (
+                            <TouchableOpacity onPress={handleAddClass}>
+                                <AntDesign name="pluscircle" size={30} color="rgba(50, 85, 147, 1)" />
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity onPress={handleRemoveClass}>
+                                <AntDesign name="minuscircle" size={30} color="#ff5a5f" />
+                            </TouchableOpacity>
+                        )
                     )
-                )}
+                ) : null}
             </View>
         )
     };
@@ -131,19 +132,19 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10, borderBottomWidth: 2, borderBottomColor: "#e5e5e5" }}>
                     <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{`${totalEnrolled} / ${maxCapacity} enrolled`}</Text>
-                    <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{`${numOnWaitlist} on waitlist`}</Text>
+                    <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{`${numOnWaitlist ? `${numOnWaitlist}` : "n/a"} on waitlist`}</Text>
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10, borderBottomWidth: 2, borderBottomColor: "#e5e5e5" }}>
                     <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{`Location`}</Text>
-                    <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{`${location}`}</Text>
+                    <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{location ? `${location}` : "TBA"}</Text>
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10, borderBottomWidth: 2, borderBottomColor: "#e5e5e5" }}>
                     <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{`Time`}</Text>
-                    <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{`${time}`}</Text>
+                    <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{time ? `${time}` : "TBA"}</Text>
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10, borderBottomWidth: 2, borderBottomColor: "#e5e5e5" }}>
                     <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{`Days`}</Text>
-                    <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{`${days}`}</Text>
+                    <Text style={[styles.classInfoStyles, { color: darkMode ? "white" : "#011627" }]}>{days ? `${days}` : "TBA"}</Text>
                 </View>
             </View>
         </View>

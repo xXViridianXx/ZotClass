@@ -13,6 +13,7 @@ import { StudyPlanData } from '../components/DummyData';
 import StudyPlanCard from '../components/StudyPlanCard';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { fetchStudyPlan } from '../DatabaseHelpers/StudyPlan';
+import NotFound from '../components/NotFound';
 const StudyPlanScreen = () => {
     const navigation = useNavigation();
 
@@ -32,29 +33,38 @@ const StudyPlanScreen = () => {
         return <StudyPlanCard classObj={item} />
     }
 
+
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <SafeAreaView style={[styles.container, { backgroundColor: dynamicStyle(darkMode, "black", "white") }]}>
                 <View style={styles.courseList}>
-                    <Text style={{ fontSize: 45, fontWeight: "800", fontStyle: "italic", color: "rgba( 50, 85, 147, 100)", marginBottom: 5}}>Study Plan</Text>
-                    <View style={{ width: "90%", flex: 1}}>
-                        {loading ?
-                            (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                <ActivityIndicator size="large" />
-                            </View>)
-                            :
-                            (
-                                <FlatList
-                                    showsVerticalScrollIndicator={false}
+                    <Text style={{ fontSize: 45, fontWeight: "800", fontStyle: "italic", color: dynamicStyle(darkMode, "white", "rgba( 50, 85, 147, 100)"), marginBottom: 5 }}>Study Plan</Text>
+                    {!uid ?
+                        <View style={{ flex: 1, width: "90%", justifyContent: "center", alignItems: "center" }}>
+                            <Text style={{ color: dynamicStyle(darkMode, "rgba( 255, 255, 255, .5)", "rgba( 50, 85, 147, .5)"), fontSize: 20, fontWeight: "600"}}>
+                                Sign In To Create A Study Plan
+                            </Text>
+                        </View>
+                        :
+                        <View style={{ width: "90%", flex: 1, paddingBottom: 10 }}>
+                            {loading ?
+                                (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <ActivityIndicator size="large" />
+                                </View>)
+                                :
+                                (
+                                    <FlatList
+                                        showsVerticalScrollIndicator={false}
 
-                                    data={studyPlan}
-                                    renderItem={renderSection}
-                                    keyExtractor={(item, index) => index.toString()}
-                                // ListEmptyComponent={selected && selectedSeason && selectedYear ? NotFound : null}
-                                />
-                            )}
+                                        data={studyPlan}
+                                        renderItem={renderSection}
+                                        keyExtractor={(item, index) => index.toString()}
+                                    ListEmptyComponent={NotFound("Looks Like We're Partying Tonight")}
+                                    />
+                                )}
 
-                    </View>
+                        </View>}
+
                 </View>
             </SafeAreaView>
         </GestureHandlerRootView>

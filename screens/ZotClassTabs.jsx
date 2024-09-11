@@ -9,6 +9,7 @@ const Tabs = createBottomTabNavigator()
 export default function ZotClassTabs() {
 
     const darkMode = useSelector((state) => state.currentUser.darkMode);
+    const uid = useSelector((state) => state.currentUser.uid);
     return (
         <Tabs.Navigator
             initialRouteName='SearchScreen'
@@ -20,16 +21,21 @@ export default function ZotClassTabs() {
                     backgroundColor: darkMode ? "black" : "white"
                 }
             }}>
-            <Tabs.Screen name="TimeTableScreen" component={TimeTable} options={{
-                headerShown: false, tabBarIcon: ({ focused }) => (
-                    <AntDesign name="calendar" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
-                )
-            }} />
-            <Tabs.Screen name="StudyPlanScreen" component={StudyPlanScreen} options={{
-                headerShown: false, tabBarIcon: ({ focused }) => (
-                    <FontAwesome name="list" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
-                )
-            }} />
+            {uid ?
+                <Tabs.Screen name="TimeTableScreen" component={TimeTable} options={{
+                    headerShown: false, tabBarIcon: ({ focused }) => (
+                        <AntDesign name="calendar" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
+                    )
+                }} />
+                : null}
+
+            {uid ?
+                <Tabs.Screen name="StudyPlanScreen" component={StudyPlanScreen} options={{
+                    headerShown: false, tabBarIcon: ({ focused }) => (
+                        <FontAwesome name="list" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
+                    )
+                }} />
+                : null}
             <Tabs.Screen name="SearchScreen" component={HomeScreen} options={{
                 headerShown: false, tabBarIcon: ({ focused }) => (
                     <FontAwesome name="search" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />

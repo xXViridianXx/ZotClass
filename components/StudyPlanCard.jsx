@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native'
 import React, { PureComponent } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import StatusColor from './StatusColor'
 import { getClassStatus } from './getClass'
-
+import { removeClassFromStudyPlan, removeClassFromDay} from '../redux/reducers/user'
+import { deleteClass } from '../DatabaseHelpers/StudyPlan'
+import { useDispatch, useSelector } from 'react-redux'
+import { current } from '@reduxjs/toolkit'
 const dataRow = (label, data) => {
     return (
         <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 2, borderBottomColor: "rgba(255, 255, 255, .3)", paddingVertical: 5 }}>
@@ -12,7 +15,17 @@ const dataRow = (label, data) => {
         </View>
     )
 }
+
+
+
 const StudyPlanCard = React.memo(({ classObj }) => {
+    const dispatch = useDispatch()
+    const uid = useSelector((state) => state.currentUser.uid);
+    const removeClassFromTimetable = (code) => {
+        dispatch(removeClassFromDay(code));
+        dispatch(removeClassFromStudyPlan(code))
+        deleteClass(uid, code)
+    }
     const cardLabels = ["Quarter", "Location", "Times", "Days"]
     const data = [
         `${classObj.quarter} ${classObj.year}`,
@@ -20,7 +33,19 @@ const StudyPlanCard = React.memo(({ classObj }) => {
         classObj.time ? classObj.time : "TBA",
         classObj.days.length > 0 ? classObj.days : "TBA"]
     return (
-        <TouchableOpacity style={[styles.cardContainer, { backgroundColor: classObj.color }]}>
+        <TouchableOpacity
+            onLongPress={() => {
+                Alert.alert(
+                    'Deleting Class',
+                    `Are you sure you want to delete \n ${classObj.className}`,
+                    [
+                        { text: 'Cancel', onPress: () => null },
+                        { text: 'Delete', style: 'destructive', onPress: () => removeClassFromTimetable(classObj.sectionCode) },
+                    ]
+                )
+            }
+            }
+            style={[styles.cardContainer, { backgroundColor: classObj.color }]}>
 
             <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", borderBottomWidth: 2, borderColor: "rgba(255, 255, 255, .3)", paddingBottom: 10, alignItems: "center" }}>
                 <View>

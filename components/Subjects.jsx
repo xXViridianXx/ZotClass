@@ -150,10 +150,22 @@ const data = [
 
 ]
 
+
+const getCurrentYear = () => {
+    const today = new Date();
+    return today.getFullYear();
+}
+
+
+
+const currentYear = getCurrentYear();
+const nextYear = currentYear + 1;
+
 const years = [
-    { key: "2024", value: "2024" },
-    { key: "2023", value: "2023" }
-]
+    { key: currentYear.toString(), value: currentYear.toString() },
+    { key: nextYear.toString(), value: nextYear.toString() }
+];
+
 const seasons = [
     { key: "Fall", value: "Fall" },
     { key: "Winter", value: "Winter" },
@@ -163,4 +175,20 @@ const seasons = [
     { key: "Summer10wk", value: "Summer10wk" },
 ]
 
-export {data, years, seasons}
+const getCurrentQuarter = () => {
+    const today = new Date();
+    const month = today.getMonth();
+
+    switch (month) {
+        case month >= 8 && month <= 11:
+            return seasons[0]
+        case month >= 0 && month <= 2:
+            return seasons[1]
+        case month >= 3 && month <= 5:
+            return seasons[2]
+        default:
+            return seasons[0]
+    }
+};
+
+export { data, years, seasons, getCurrentQuarter }

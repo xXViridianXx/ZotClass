@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Dimensions, Platform, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback, Keyboard, TextInput, KeyboardAvoidingView, useColorScheme, Button } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useNavigation } from '@react-navigation/native'
-import { data, seasons, years } from '../components/Subjects';
+import { data, seasons, years, getCurrentQuarter } from '../components/Subjects';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -22,7 +22,7 @@ const HomeScreen = () => {
     const dispatch = useDispatch();
     const darkMode = useSelector((state) => state.currentUser.darkMode);
     const uid = useSelector((state) => state.currentUser.uid);
-    const test = useSelector((state) => state.currentUser.studyPlan); 
+    const test = useSelector((state) => state.currentUser.studyPlan);
 
     const handleToggle = () => {
         dispatch(toggleDarkMode());
@@ -43,6 +43,10 @@ const HomeScreen = () => {
     const logout = async () => {
         console.log('logging out')
         try {
+            if (uid == null) {
+                navigation.navigate("LoginScreen");
+                return
+            }
             await signOut(getAuth())
             dispatch(clearUserID())
             setTimeout(() => {
@@ -62,16 +66,10 @@ const HomeScreen = () => {
             await Promise.all(
                 classesFromDB.map((classObj) => dispatch(addClassToStudyPlan(classObj)))
             );
-
-           for (let i = 0; i < test.length; i++) {
-            console.log(test[i])
-            console.log()
-           }
             // classesFromDB.forEach((data) => filterClass(data, dispatch))
         }
         fetchData()
     }, [uid])
-
 
 
     return (
@@ -81,13 +79,15 @@ const HomeScreen = () => {
                     <TouchableOpacity onPress={handleToggle}
                         style={{ padding: 10, borderRadius: 5, alignSelf: 'flex-start', backgroundColor: darkMode ? "#011627" : "rgba( 50, 85, 147, 100)" }}
                         activeOpacity={1}>
-                        <Ionicons name="moon" size={25} color="white" />
+
+                        <Ionicons name={darkMode ? "sunny" : "moon"} size={25} color="white" />
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={logout}
                         style={{ padding: 10, borderRadius: 5, alignSelf: 'flex-start', backgroundColor: darkMode ? "#011627" : "rgba( 50, 85, 147, 100)" }}>
                         <MaterialIcons name="logout" size={25} color="white" />
                     </TouchableOpacity>
+
                 </View>
                 <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -96,8 +96,15 @@ const HomeScreen = () => {
 
                     <StatusBar style={darkMode ? 'light' : 'dark'} />
 
+                    <View style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <Text style={{ fontSize: 45, fontWeight: "800", fontStyle: 'italic', color: dynamicStyle(darkMode, "white", "rgba( 50, 85, 147, 100)") }}>ZotClass</Text>
+                        {!uid ?
+                            <Text style={{ fontSize: 20, fontWeight: "800", fontStyle: 'italic', color: dynamicStyle(darkMode, "rgba( 50, 85, 147, 100)", "rgba( 50, 85, 147, 100)") }}>
+                                Login To Access More Features
+                            </Text> : null
+                        }
+                    </View>
 
-                    <Text style={{ fontSize: 45, fontWeight: "800", fontStyle: 'italic', color: dynamicStyle(darkMode, "rgba( 50, 85, 147, 100)", "rgba( 50, 85, 147, 100)") }}>ZotClass</Text>
                     <Dropdown
                         style={[styles.boxStyle, { borderBottomColor: dynamicStyle(darkMode, "#011627", "rgba( 50, 85, 147, 100)") }]}
                         data={data}
@@ -108,7 +115,7 @@ const HomeScreen = () => {
                         activeColor={dynamicStyle(darkMode, "black", "white")}
                         placeholderStyle={{ color: "#e5e5e5", fontWeight: 700 }}
                         searchPlaceholder="Search Subject..."
-                        selectedTextStyle={styles.selectedTextStyle}
+                        selectedTextStyle={[styles.selectedTextStyle, { color: darkMode ? "white" : "rgba( 50, 85, 147, 100)" }]}
                         inputSearchStyle={{ color: dynamicStyle(darkMode, "white", "#011627") }}
                         itemTextStyle={[styles.dropDownTextStyle, { color: dynamicStyle(darkMode, "white", "#011627") }]}
                         containerStyle={{ borderRadius: 5, backgroundColor: dynamicStyle(darkMode, "#011627", "white") }}
@@ -121,18 +128,36 @@ const HomeScreen = () => {
                         data={seasons}
                         labelField="value"
                         valueField="key"
+                        value={getCurrentQuarter()}
                         maxHeight={200}
                         activeColor={dynamicStyle(darkMode, "black", "white")}
                         placeholder='Enter Quarter...'
                         placeholderStyle={{ color: "#e5e5e5", fontWeight: 700 }}
-                        selectedTextStyle={styles.selectedTextStyle}
+                        selectedTextStyle={[styles.selectedTextStyle, { color: darkMode ? "white" : "rgba( 50, 85, 147, 100)" }]}
                         itemTextStyle={[styles.dropDownTextStyle, { color: dynamicStyle(darkMode, "white", "#011627") }]}
                         containerStyle={{ borderRadius: 5, backgroundColor: dynamicStyle(darkMode, "#011627", "white") }}
                         onChange={(season) => {
                             setSelectedSeason(season.key);
                         }}
                     />
-                    <TextInput
+                    <Dropdown
+                        style={[styles.boxStyle, { borderBottomColor: dynamicStyle(darkMode, "#011627", "rgba( 50, 85, 147, 100)") }]}
+                        data={years}
+                        labelField="value"
+                        valueField="key"
+                        maxHeight={200}
+                        value={years[0]}
+                        activeColor={dynamicStyle(darkMode, "black", "white")}
+                        placeholder='Enter Year...'
+                        placeholderStyle={{ color: "#e5e5e5", fontWeight: 700 }}
+                        selectedTextStyle={[styles.selectedTextStyle, { color: darkMode ? "white" : "rgba( 50, 85, 147, 100)" }]}
+                        itemTextStyle={[styles.dropDownTextStyle, { color: dynamicStyle(darkMode, "white", "#011627") }]}
+                        containerStyle={{ borderRadius: 5, backgroundColor: dynamicStyle(darkMode, "#011627", "white") }}
+                        onChange={(season) => {
+                            setSelectedSeason(season.key);
+                        }}
+                    />
+                    {/* <TextInput
                         placeholder="Enter Year..."
                         keyboardType="numeric"
                         value={selectedYear}
@@ -141,7 +166,7 @@ const HomeScreen = () => {
                         style={[styles.boxStyle, { paddingBottom: 10, fontWeight: "700", color: "rgba( 50, 85, 147, 100)", fontSize: 16, borderBottomColor: dynamicStyle(darkMode, "#011627", "rgba( 50, 85, 147, 100)") }]}
                         placeholderTextColor={"#e5e5e5"}
                     >
-                    </TextInput>
+                    </TextInput> */}
 
                     <TouchableOpacity
                         style={[styles.searchButton, { backgroundColor: dynamicStyle(darkMode, "#011627", "rgba( 50, 85, 147, 100)") }]}
@@ -184,7 +209,6 @@ const styles = StyleSheet.create({
         width: 280
     },
     selectedTextStyle: {
-        color: "rgba( 50, 85, 147, 100)",
         fontWeight: "bold",
         width: 280
     },

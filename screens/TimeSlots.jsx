@@ -4,6 +4,7 @@ import { schedule } from '../components/DummyData'
 import { useDispatch } from 'react-redux'
 import { removeClassFromDay, removeClassFromStudyPlan } from '../redux/reducers/user'
 import { deleteClass } from '../DatabaseHelpers/StudyPlan'
+import { useSelector } from 'react-redux'
 // startTime (exclusive), endtime {inclusive}, step (minutes)
 const generateTimeSlots = (startTime, endTime, step) => {
     const times = []
@@ -50,12 +51,14 @@ const TimeSlots = ({ classData, uid }) => {
     }
 
     timeSlots = generateTimeSlots(7, 20, 30)
+    const darkMode = useSelector((state) => state.currentUser.darkMode);
+
     return (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <ScrollView style={[styles.container, {backgroundColor: darkMode ? "black" : "white"}]} showsVerticalScrollIndicator={false}>
             <View style={{ marginBottom: 10 }}>
                 {timeSlots.map((time, index) => (
                     <View key={index} style={styles.timeSlot}>
-                        <Text style={styles.timeText}>{time}</Text>
+                        <Text style={[styles.timeText, {color : darkMode ? "white" : "black"}]}>{time}</Text>
                         {(time.endsWith('00 AM') || time.endsWith('00 PM')) && <View style={styles.fullHourLine} />}
                         {(time.endsWith('30 AM') || time.endsWith('30 PM')) && <View style={styles.halfHourLine} />}
                     </View>
@@ -81,7 +84,7 @@ const TimeSlots = ({ classData, uid }) => {
                         }]}>
                     <Text style={styles.scheduleText}>{classInfo.className}</Text>
                     <Text style={styles.scheduleText}>{classInfo.classLocation}</Text>
-                    <Text style={styles.scheduleText}>{classInfo.time}</Text>
+                    <Text style={styles.scheduleText}>{classInfo.time} {classInfo.days}</Text>
                 </TouchableOpacity>
             ))}
         </ScrollView>
@@ -94,7 +97,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         // padding: 10,
-        backgroundColor: 'white',
     },
     timeSlot: {
         height: 30,
