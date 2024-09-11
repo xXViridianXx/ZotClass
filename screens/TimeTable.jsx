@@ -1,20 +1,48 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TimeSlots from './TimeSlots';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 import { schedule } from '../components/DummyData';
 import { useDispatch, useSelector } from 'react-redux';
+import { filterClass } from '../DatabaseHelpers/StudyPlan';
 // Example data
 
 
-const App = () => {
+const TimeTable = () => {
+
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-    const schedule = useSelector((state) => state.currentUser.schedule);
-    // const itemsByDay = daysOfWeek.reduce((acc, day) => {
-    //     acc[day] = StudyPlanData.filter(item => item.days.includes(day[0]));
-    //     return acc;
-    // }, {});
+    const dispatch = useDispatch()
+
+
+    const uid = useSelector((state) => state.currentUser.uid);
+    const studyPlan = useSelector((state) => state.currentUser.studyPlan);
+    // const schedule = useSelector((state) => state.currentUser.schedule);
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         sortClasses();
+    //     }, 100);
+
+    // }, [studyPlan]);
+
+    // const sortClasses = async () => {
+    //     await Promise.all(studyPlan.map((classObj) => filterClass(classObj, dispatch)));
+    // }
+
+    const schedule = [[], [], [], [], [], []]
+    studyPlan.forEach((classObj) => {
+        classObj.days.forEach(day => {
+            if (day === "M") schedule[0].push(classObj)
+            else if (day === "Tu") schedule[1].push(classObj)
+            else if (day === "W") schedule[2].push(classObj)
+            else if (day === "Th") schedule[3].push(classObj)
+            else if (day === "F") schedule[4].push(classObj)
+            else schedule[5].push(classObj)
+        });
+    })
+
+    console.log("schedule", schedule)
     return (
         <View style={styles.container}>
             <ScrollView horizontal pagingEnabled >
@@ -23,14 +51,7 @@ const App = () => {
                         <View style={styles.dayContainer}>
                             <Text style={styles.dayText}>{day}</Text>
                         </View>
-                        {/* <FlatList
-                            data={itemsByDay[day]}
-                            renderItem={renderItem}
-                            keyExtractor={item => item.sectionCode}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={styles.flatListContainer}
-                        /> */}
-                        <TimeSlots classData={schedule[index]} />
+                        <TimeSlots classData={schedule[index]} uid={uid} />
                     </View>
                 ))}
             </ScrollView>
@@ -93,4 +114,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default App;
+export default TimeTable;

@@ -3,13 +3,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const initialState = {
     darkMode: false,
     uid: null,
-    schedule: [ // Monday = 0, Tuesday = 1, etc...
+    schedule: [ // Monday = 0, Tuesday = 1, etc... last index for TBA stuff
+        [],
         [],
         [],
         [],
         [],
         []
-    ]
+    ],
+    studyPlan: []
 }
 
 export const currentUserSlice = createSlice({
@@ -37,6 +39,13 @@ export const currentUserSlice = createSlice({
                 daySchedule.filter(classObj => classObj.sectionCode !== sectionCode)
             );
 
+        },
+        addClassToStudyPlan: (state, action) => {
+            state.studyPlan.push(action.payload)
+        },
+        removeClassFromStudyPlan: (state, action) => {
+            const sectionCode = action.payload
+            state.studyPlan = state.studyPlan.filter(classObj => classObj.sectionCode !== sectionCode)
         }
     }
 })
@@ -46,7 +55,7 @@ export const currentUserSlice = createSlice({
 //     setDarkMode: (payload) => ({ type: 'darkMode/setDarkMode', payload }),
 // }
 // export const { setDarkMode } = toggleDarkModeSlice.actions
-export const { setDarkMode, setUID, clearUID, addClassToDay, removeClassFromDay } = currentUserSlice.actions;
+export const { setDarkMode, setUID, clearUID, addClassToDay, removeClassFromDay, addClassToStudyPlan, removeClassFromStudyPlan } = currentUserSlice.actions;
 
 // load from async
 export const loadDarkMode = () => async (dispatch) => {

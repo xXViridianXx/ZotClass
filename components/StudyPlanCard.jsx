@@ -1,130 +1,67 @@
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert, SafeAreaView } from 'react-native';
-import React from 'react';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import TimeTableView, { genTimeBlock } from 'react-native-timetable';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import React, { PureComponent } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import StatusColor from './StatusColor'
+import { getClassStatus } from './getClass'
 
-// Sample data
-const events_data = [
-    {
-        title: "COMPSCI 121",
-        startTime: genTimeBlock("MON", 13),
-        endTime: genTimeBlock("MON", 14, 50),
-        location: "DBH 1100",
-        extra_descriptions: ["Lec A"],
-    },
-    {
-        title: "COMPSCI 112",
-        startTime: genTimeBlock("MON", 12),
-        endTime: genTimeBlock("MON", 12, 50),
-        location: "SH 134",
-        extra_descriptions: ["Dis 1"],
-    },
-    {
-        title: "Physics",
-        startTime: genTimeBlock("MON", 11),
-        endTime: genTimeBlock("MON", 11, 50),
-        location: "Lab 404",
-        extra_descriptions: ["Einstein"],
-    },
-    {
-        title: "Physics",
-        startTime: genTimeBlock("WED", 11),
-        endTime: genTimeBlock("WED", 11, 50),
-        location: "Lab 404",
-        extra_descriptions: ["Einstein"],
-    },
-    {
-        title: "Mandarin",
-        startTime: genTimeBlock("TUE", 9),
-        endTime: genTimeBlock("TUE", 10, 50),
-        location: "Language Center",
-        extra_descriptions: ["Chen"],
-    },
-    {
-        title: "Japanese",
-        startTime: genTimeBlock("FRI", 9),
-        endTime: genTimeBlock("FRI", 10, 50),
-        location: "Language Center",
-        extra_descriptions: ["Nakamura"],
-    },
-    {
-        title: "Club Activity",
-        startTime: genTimeBlock("THU", 9),
-        endTime: genTimeBlock("THU", 10, 50),
-        location: "Activity Center",
-    },
-    {
-        title: "Club Activity",
-        startTime: genTimeBlock("FRI", 21, 30),
-        endTime: genTimeBlock("FRI", 22,),
-        location: "Activity Center",
-    },
-];
-
-// StudyPlanCard Component
-const StudyPlanCard = React.memo(() => {
-    const numOfDays = 5;
-    const pivotDate = genTimeBlock('mon');
-
-    const onEventPress = (evt) => {
-        Alert.alert("onEventPress", JSON.stringify(evt));
-    };
+const dataRow = (label, data) => {
     return (
-        <View style={{ flex: 1, padding: 10 }}>
-            <TimeTableView
-                events={events_data}
-                pivotTime={6}
-                pivotEndTime={22}
-                pivotDate={pivotDate}
-                nDays={numOfDays}
-                onEventPress={onEventPress}
-                headerStyle={styles.headerStyle}
-                formatDateHeader="dddd"
-                locale="en-US"
-            /></View>
-    );
-});
+        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 2, borderBottomColor: "rgba(255, 255, 255, .3)", paddingVertical: 5 }}>
+            <Text style={{ color: "white", fontWeight: "800", }}>{label}</Text>
+            <Text style={{ color: "white", fontWeight: "800", textAlign: "right" }}>{data}</Text>
+        </View>
+    )
+}
+const StudyPlanCard = React.memo(({ classObj }) => {
+    const cardLabels = ["Quarter", "Location", "Times", "Days"]
+    const data = [
+        `${classObj.quarter} ${classObj.year}`,
+        classObj.classLocation ? classObj.classLocation : "TBA",
+        classObj.time ? classObj.time : "TBA",
+        classObj.days.length > 0 ? classObj.days : "TBA"]
+    return (
+        <TouchableOpacity style={[styles.cardContainer, { backgroundColor: classObj.color }]}>
 
-export default StudyPlanCard;
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", borderBottomWidth: 2, borderColor: "rgba(255, 255, 255, .3)", paddingBottom: 10, alignItems: "center" }}>
+                <View>
+                    <Text style={{ color: "white", fontWeight: "700", fontSize: 25 }}>{classObj.className}</Text>
+                    <Text style={{ color: "white", fontWeight: "800" }}>{classObj.classTitle}</Text>
+                </View>
+                <View style={{ display: "flex", flexDirection: "col", justifyContent: "space-between", alignItems: "center", }}>
+                    <Text style={{ color: "white", fontWeight: "800", marginBottom: 5 }}>{classObj.sectionType} {classObj.sectionNumber}</Text>
+                    <Text style={{ color: "white", fontWeight: "800", borderWidth: 2, padding: 2, borderRadius: 5, borderColor: "white" }}>{classObj.sectionCode}</Text>
+                </View>
+
+            </View>
+
+            <View >
+                {cardLabels.map((item, index) => dataRow(item, data[index]))}
+            </View>
+
+        </TouchableOpacity>
+    )
+})
+
+export default StudyPlanCard
 
 const styles = StyleSheet.create({
-    classTitle: {
-        color: "white",
-        fontWeight: "800",
-        fontSize: 20,
-    },
-    className: {
-        color: "white",
-        fontWeight: "600",
-        fontSize: 18,
-    },
-    classSection: {
-        color: "#011627",
-        fontWeight: "600",
-        backgroundColor: "white",
-    },
-    location: {
-        color: "#011627",
-        fontWeight: "600",
-        backgroundColor: "white",
-    },
     cardContainer: {
-        display: 'flex',
-        width: "100%",
-    },
-    cardMain: {
-        flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: "white",
+        flex: 1,
+        padding: 10,
         borderRadius: 5,
+        marginTop: 10,
+        marginBottom: 5,
+        width: "100%",
+        // alignItems: "center"
+        // flexDirection: "row",
+        // justifyContent: "space-between",
+        backgroundColor: "rgba( 50, 85, 147, 100)",
+
         elevation: 5, // (Android) shadow
-        shadowColor: '#000', // iOS shadow
+        // iOS shadow
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
-    },
-    headerStyle: {
-        backgroundColor: 'rgba( 50, 85, 147, 100)',
-        borderRadius: 5,
     }
-});
+})

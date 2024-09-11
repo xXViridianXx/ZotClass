@@ -2,7 +2,8 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert } from 'rea
 import React from 'react'
 import { schedule } from '../components/DummyData'
 import { useDispatch } from 'react-redux'
-import { removeClassFromDay } from '../redux/reducers/user'
+import { removeClassFromDay, removeClassFromStudyPlan } from '../redux/reducers/user'
+import { deleteClass } from '../DatabaseHelpers/StudyPlan'
 // startTime (exclusive), endtime {inclusive}, step (minutes)
 const generateTimeSlots = (startTime, endTime, step) => {
     const times = []
@@ -25,14 +26,16 @@ const generateTimeSlots = (startTime, endTime, step) => {
 }
 
 const addClassToTimeTable = (startHour, startMinutes) => {
+    console.log("startHour: ", startHour)
     const scaledMinutes = (startHour - 8) * 60
     const convertToRender = (scaledMinutes + startMinutes)
     const offset = 15
+    console.log(scaledMinutes, convertToRender)
     return offset + convertToRender
 }
 
 
-const TimeSlots = ({ classData }) => {
+const TimeSlots = ({ classData, uid }) => {
     const dispatch = useDispatch()
     if (classData) {
         for (let i of classData) {
@@ -42,6 +45,8 @@ const TimeSlots = ({ classData }) => {
 
     const removeClassFromTimetable = (code) => {
         dispatch(removeClassFromDay(code));
+        dispatch(removeClassFromStudyPlan(code))
+        deleteClass(uid, code)
     }
 
     timeSlots = generateTimeSlots(7, 20, 30)

@@ -3,7 +3,7 @@ const getClass = async (subject, season, year) => {
     try {
         // const url = `https://1tgg4m2pra.execute-api.us-east-2.amazonaws.com/prod/courses?subject=${subject}`
         const url = `https://api.peterportal.org/rest/v0/schedule/soc?term=${year}%20${season}&department=${subject}`
-        console.log(url)
+        // console.log(url)
         const response = await fetch(url)
         if (!response.ok) {
             throw new Error('Response was bad :(');

@@ -19,7 +19,7 @@ const resetPassword = async (email) => {
     const auth = getAuth()
     try {
         if (email.length == 0) {
-            console.log("email is 0")
+            // console.log("email is 0")
             showToast('Please Enter Email Address')
             return false
         }

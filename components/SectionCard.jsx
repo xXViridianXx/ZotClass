@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react'
 import StatusColor from './StatusColor'
 import { useDispatch, useSelector } from 'react-redux';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { addClass, deleteClass } from '../DatabaseHelpers/StudyPlan';
+import { addClass, deleteClass, filterClass } from '../DatabaseHelpers/StudyPlan';
 import { addClassToDay } from '../redux/reducers/user';
+import { addClassToStudyPlan, removeClassFromStudyPlan } from '../redux/reducers/user';
 const SectionCard = React.memo(({ section, name, title, subject, quarter, year }) => {
 
     const finalExam = section.finalExam
@@ -43,32 +44,37 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
         subject: subject,
         quarter: quarter,
         year: year,
+        sectionUnits: sectionUnits
     }
     const dispatch = useDispatch()
 
-    const filterClass = (newClass) => {
-        if (newClass.days == []) return
+    // const filterClass = (newClass, dispatch) => {
+    //     if (newClass.days == []) return
 
+    //     // const schedule = useSelector((state) => state.currentUser.schedule);
+    //     newClass.days.forEach(day => {
+    //         if (day === "M") dispatch(addClassToDay({ index: 0, newClass }));
+    //         if (day === "Tu") dispatch(addClassToDay({ index: 1, newClass }));
+    //         if (day === "W") dispatch(addClassToDay({ index: 2, newClass }));
+    //         if (day === "Th") dispatch(addClassToDay({ index: 3, newClass }));
+    //         if (day === "F") dispatch(addClassToDay({ index: 4, newClass }));
+    //     });
 
-        // const schedule = useSelector((state) => state.currentUser.schedule);
-        newClass.days.forEach(day => {
-            if (day === "M") dispatch(addClassToDay({ index: 0, newClass }));
-            if (day === "Tu") dispatch(addClassToDay({ index: 1, newClass }));
-            if (day === "W") dispatch(addClassToDay({ index: 2, newClass }));
-            if (day === "Th") dispatch(addClassToDay({ index: 3, newClass }));
-            if (day === "F") dispatch(addClassToDay({ index: 4, newClass }));
-        });
-
-    };
+    // };
 
     const handleAddClass = async () => {
         setLoading(true)
+
         try {
             const updatedClassData = await addClass(uid, classData)
             setAddedClass(true)
             setRemovedClass(false)
-            console.log("Class added successfully");
-            filterClass(updatedClassData)
+            console.log("Class added successfully", updatedClassData);
+            if (updatedClassData != -1) {
+                // filterClass(updatedClassData, dispatch)
+                console.log("adding to study plan")
+                dispatch(addClassToStudyPlan(updatedClassData))
+            }
 
         } catch (error) {
             console.error("Error adding class: ", error);
@@ -80,6 +86,7 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
         setLoading(true)
         try {
             await deleteClass(uid, sectionCode);
+            dispatch(removeClassFromStudyPlan(sectionCode))
             setAddedClass(false)
             setRemovedClass(true)
             console.log("Class added successfully");

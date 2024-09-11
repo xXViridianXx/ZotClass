@@ -4,14 +4,14 @@ import { StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadDarkMode } from '../redux/reducers/user';
 const LoadingScreen = () => {
-    const dispatch = useDispatch();
-    const darkMode = useSelector((state) => state.currentUser.darkMode);
-    useEffect(() => {
-        dispatch(loadDarkMode());
-    }, [dispatch]);
+    // const dispatch = useDispatch();
+    // const darkMode = useSelector((state) => state.currentUser.darkMode);
+    // useEffect(() => {
+    //     dispatch(loadDarkMode());
+    // }, [dispatch]);
     return (
-        <SafeAreaView style={[styles.container, { backgroundColor: darkMode ? "black" : "white" }]}>
-            <StatusBar style={darkMode ? 'light' : 'dark'} />
+        <SafeAreaView style={[styles.container, { backgroundColor: "white" }]}>
+            <StatusBar style={'dark'} />
             <ActivityIndicator size="large" color="rgba( 50, 85, 147, 100)" />
         </SafeAreaView>
     )

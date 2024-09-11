@@ -18,12 +18,14 @@ import LoadingScreen from './screens/LoadingScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import ZotClassTabs from './screens/ZotClassTabs';
+// import { ZotClassTabs } from './screens/ZotClassTabs';
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator()
 export default function Main() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
-    const darkMode = useSelector((state) => state.currentUser.darkMode);
+    // const darkMode = useSelector((state) => state.currentUser.darkMode);
     const uid = useSelector((state) => state.currentUser.uid);
 
     useEffect(() => {
@@ -34,30 +36,37 @@ export default function Main() {
         fetchUserID()
     }, [dispatch])
 
-    function ZotClassTabs() {
-        return (
-            <Tabs.Navigator initialRouteName='SearchScreen'
-                screenOptions={{
-                    tabBarActiveTintColor: "rgba( 50, 85, 147, 100)",
-                    tabBarShowLabel: false,
-                    tabBarStyle: {
-                        backgroundColor: darkMode ? "black" : "white"
-                    }
-                }}>
-                <Tabs.Screen name="TimeTableScreen" component={TimeTable} options={{
-                    headerShown: false, tabBarIcon: ({ focused }) => (
-                        <AntDesign name="calendar" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
-                    )
-                }} />
-                <Tabs.Screen name="SearchScreen" component={HomeScreen} options={{
-                    headerShown: false, tabBarIcon: ({ focused }) => (
-                        <FontAwesome name="search" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
-                    )
-                }} />
+    // function ZotClassTabs() {
+    //     return (
+    //         <Tabs.Navigator
+    //             initialRouteName='SearchScreen'
+    //             swipeEnabled={true}
+    //             screenOptions={{
+    //                 tabBarActiveTintColor: "rgba( 50, 85, 147, 100)",
+    //                 tabBarShowLabel: false,
+    //                 // tabBarStyle: {
+    //                 //     backgroundColor: darkMode ? "black" : "white"
+    //                 // }
+    //             }}>
+    //             <Tabs.Screen name="TimeTableScreen" component={TimeTable} options={{
+    //                 headerShown: false, tabBarIcon: ({ focused }) => (
+    //                     <AntDesign name="calendar" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
+    //                 )
+    //             }} />
+    //             <Tabs.Screen name="StudyPlanScreen" component={StudyPlanScreen} options={{
+    //                 headerShown: false, tabBarIcon: ({ focused }) => (
+    //                     <FontAwesome name="list" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
+    //                 )
+    //             }} />
+    //             <Tabs.Screen name="SearchScreen" component={HomeScreen} options={{
+    //                 headerShown: false, tabBarIcon: ({ focused }) => (
+    //                     <FontAwesome name="search" size={24} color={focused ? "rgba( 50, 85, 147, 100)" : "#e5e5e5"} />
+    //                 )
+    //             }} />
 
-            </Tabs.Navigator>
-        );
-    }
+    //         </Tabs.Navigator>
+    //     );
+    // }
 
     if (loading) {
         return (

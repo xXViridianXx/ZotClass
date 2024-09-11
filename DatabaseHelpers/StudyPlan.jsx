@@ -1,6 +1,6 @@
 import { db } from "../config/firebase";
 import { addDoc, deleteDoc, collection, getDoc, query, where, getDocs, doc } from "firebase/firestore";
-import { useDispatch, useSelector } from "react-redux";
+import { addClassToDay } from "../redux/reducers/user";
 // classData = {
 //     className: COMPSCI 121
 //     classTitle: Info Retrieval
@@ -114,15 +114,14 @@ const addClass = async (uid, classData) => {
                 ...timeData
             }
             // console.log(updatedClassData)
+            const status = await addDoc(userStudyPlan, updatedClassData)
             return updatedClassData
-            // return await addDoc(userStudyPlan, classData)
-
         }
-        return {}
     } catch (error) {
         console.error("Error checking class existence: ", error);
-        return {} // Handle the error appropriately
     }
+    console.log("here")
+    return -1
 
 }
 
@@ -149,5 +148,41 @@ const deleteClass = async (uid, sectionCode) => {
     }
 }
 
+const fetchStudyPlan = async (uid) => {
+    if (!uid) return []
+    const userStudyPlan = collection(db, uid)
+    try {
+        const studyPlan = []
+        const snapShot = await getDocs(userStudyPlan)
+        snapShot.forEach((doc) => {
+            studyPlan.push(doc.data())
+        });
+        return studyPlan
+    } catch (error) {
+        console.log("Error fetching study plan", error);
+    }
+    return []
 
-export { addClass, deleteClass }
+}
+
+const filterClass = (newClass, dispatch) => {
+    if (newClass.days == []) return
+    // const schedule = useSelector((state) => state.currentUser.schedule);
+    // if (newClass.days == []) {
+    //     console.log("Adding: ", newClass)
+    //     dispatch(addClassToDay({ index: 5, newClass }))
+    //     return
+    // }
+    console.log(newClass.days)
+    newClass.days.forEach(day => {
+        if (day === "M") dispatch(addClassToDay({ index: 0, newClass }));
+        if (day === "Tu") dispatch(addClassToDay({ index: 1, newClass }));
+        if (day === "W") dispatch(addClassToDay({ index: 2, newClass }));
+        if (day === "Th") dispatch(addClassToDay({ index: 3, newClass }));
+        if (day === "F") dispatch(addClassToDay({ index: 4, newClass }));
+    });
+
+};
+
+
+export { addClass, deleteClass, fetchStudyPlan, filterClass }

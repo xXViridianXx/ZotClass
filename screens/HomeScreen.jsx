@@ -7,9 +7,11 @@ import { data, seasons, years } from '../components/Subjects';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadDarkMode, toggleDarkMode, clearUserID } from '../redux/reducers/user';
+import { loadDarkMode, toggleDarkMode, setDarkMode, clearUserID, addClassToStudyPlan } from '../redux/reducers/user';
 import { signOut, getAuth } from 'firebase/auth';
-const ClassesScreen = () => {
+import { fetchStudyPlan, filterClass } from '../DatabaseHelpers/StudyPlan';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const HomeScreen = () => {
     const navigation = useNavigation();
     const [selected, setSelected] = useState("")
     const [selectedYear, setSelectedYear] = useState("")
@@ -19,14 +21,13 @@ const ClassesScreen = () => {
 
     const dispatch = useDispatch();
     const darkMode = useSelector((state) => state.currentUser.darkMode);
-
-    useEffect(() => {
-        dispatch(loadDarkMode());
-    }, [dispatch]);
+    const uid = useSelector((state) => state.currentUser.uid);
+    const test = useSelector((state) => state.currentUser.studyPlan); 
 
     const handleToggle = () => {
         dispatch(toggleDarkMode());
     };
+
 
     const handleYearChange = (value) => {
         if (value.length > 4) {
@@ -52,12 +53,25 @@ const ClassesScreen = () => {
         }
 
     }
+
     useEffect(() => {
-        const { width, height } = Dimensions.get('window');
-        const buttonWidth = 50; // Adjust button width as needed
-        const left = (width - buttonWidth) / 2;
-        setButtonPosition({ left });
-    }, []);
+        console.log("in here")
+        dispatch(loadDarkMode());
+        const fetchData = async () => {
+            const classesFromDB = await fetchStudyPlan(uid)
+            await Promise.all(
+                classesFromDB.map((classObj) => dispatch(addClassToStudyPlan(classObj)))
+            );
+
+           for (let i = 0; i < test.length; i++) {
+            console.log(test[i])
+            console.log()
+           }
+            // classesFromDB.forEach((data) => filterClass(data, dispatch))
+        }
+        fetchData()
+    }, [uid])
+
 
 
     return (
@@ -150,7 +164,7 @@ const ClassesScreen = () => {
     )
 }
 
-export default ClassesScreen
+export default HomeScreen
 
 const styles = StyleSheet.create({
     container: {
