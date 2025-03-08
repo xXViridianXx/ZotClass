@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 
 const RenderClassSections = ({ classSections, className, classTitle, subject, quarter, year }) => {
-    console.log(subject, quarter, year)
+    // console.log(subject, quarter, year)
     const name = className
     const title = classTitle
     const [courseInfo, setCourseInfo] = useState('');

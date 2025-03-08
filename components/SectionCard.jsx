@@ -87,9 +87,9 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
         year: year,
         sectionUnits: sectionUnits,
         startHour: startHour,
-        startMin: startMin,
+        startMinutes: startMin,
         endHour: endHour,
-        endMin: endMin
+        endMinutes: endMin
     }
     const dispatch = useDispatch()
 
@@ -112,12 +112,13 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
 
         try {
             const updatedClassData = await addClass(uid, classData)
-            console.log(classData)
+            // console.log("in section card")
+            // console.log(classData)
             setAddedClass(true)
             setRemovedClass(false)
             if (updatedClassData != -1) {
                 // filterClass(updatedClassData, dispatch)
-                console.log("adding to study plan")
+                // console.log("adding to study plan")
                 dispatch(addClassToStudyPlan(updatedClassData))
             }
 

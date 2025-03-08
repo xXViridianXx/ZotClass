@@ -88,7 +88,7 @@ const GetCourseInfo = async (className) => {
         }
         const json = await response.json()
         const data = json["data"]
-        console.log(data.prerequisiteText)
+        // console.log(data.prerequisiteText)
         return { description: data.description, prereqs: data.prerequisiteText, prereqTree: data.prerequisite_tree }
     }
     catch (e) {

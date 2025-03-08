@@ -85,11 +85,14 @@ const parseTimes = (startHour, startMinute, endHour, endMinute) => {
 
     const timeData = {
         startHour: startHour,
-        startMinutes: startMinutes,
+        startMinutes: startMinute,
         endHour: endHour,
-        endMinutes: endMinutes,
+        endMinutes: endMinute,
         duration: durationMinutes
     }
+
+    console.log("In parseTimes")
+    console.log(timeData)
     return timeData
 }
 
@@ -105,7 +108,7 @@ const colorGenerator = () => {
     return `rgba(${r}, ${g}, ${b}, .5)`
 }
 const getDays = (dayString) => {
-    if (dayString == "TBA" || "") {
+    if (dayString == "TBA" || "" || null) {
         return []
     }
     const stack = []
@@ -124,13 +127,16 @@ const addClass = async (uid, classData) => {
     const userStudyPlan = collection(db, uid)
     const sectionCode = classData.sectionCode
     const q = query(userStudyPlan, where("sectionCode", "==", sectionCode));
+
+    // console.log("add class")
+    // console.log(classData)
     try {
         const querySnapshot = await getDocs(q);
         if (querySnapshot.empty) {
             console.log(`adding ${sectionCode}`);
-            const days = getDays(classData.startHour, classData.startMinute, classData.endHour, classData.endMinute)
+            const days = getDays(classData.days)
             classData.days = days
-            const timeData = parseTimes(classData.time)
+            const timeData = parseTimes(classData.startHour, classData.startMinutes, classData.endHour, classData.endMinutes)
             classData.color = colorGenerator()
             const updatedClassData = {
                 ...classData,
