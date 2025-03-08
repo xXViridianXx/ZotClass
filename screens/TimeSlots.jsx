@@ -54,11 +54,11 @@ const TimeSlots = ({ classData, uid }) => {
     const darkMode = useSelector((state) => state.currentUser.darkMode);
 
     return (
-        <ScrollView style={[styles.container, {backgroundColor: darkMode ? "black" : "white"}]} showsVerticalScrollIndicator={false}>
+        <ScrollView style={[styles.container, { backgroundColor: darkMode ? "black" : "white" }]} showsVerticalScrollIndicator={false}>
             <View style={{ marginBottom: 10 }}>
                 {timeSlots.map((time, index) => (
                     <View key={index} style={styles.timeSlot}>
-                        <Text style={[styles.timeText, {color : darkMode ? "white" : "black"}]}>{time}</Text>
+                        <Text style={[styles.timeText, { color: darkMode ? "white" : "black" }]}>{time}</Text>
                         {(time.endsWith('00 AM') || time.endsWith('00 PM')) && <View style={styles.fullHourLine} />}
                         {(time.endsWith('30 AM') || time.endsWith('30 PM')) && <View style={styles.halfHourLine} />}
                     </View>
@@ -75,17 +75,28 @@ const TimeSlots = ({ classData, uid }) => {
                         ]
                     )
                 }}
-                    key={classInfo.sectionCode} style={[
+                    activeOpacity={.7}
+                    key={index} style={[
                         styles.schedule,
                         {
                             top: addClassToTimeTable(classInfo.startHour, classInfo.startMinutes),
                             height: classInfo.duration,
                             backgroundColor: classInfo.color
                         }]}>
-                    <Text style={styles.scheduleText}>{classInfo.className}</Text>
-                    <Text style={styles.scheduleText}>{classInfo.classLocation}</Text>
-                    <Text style={styles.scheduleText}>{classInfo.time} {classInfo.days}</Text>
+                    <View style={{ padding: 2 }}>
+                        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: 'center' }}>
+                            <Text style={styles.scheduleText}>{classInfo.className}</Text>
+                            <Text style={styles.scheduleText}>{classInfo.classLocation}</Text>
+                        </View>
+                        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: 'center' }}>
+                            <Text style={styles.scheduleText}>{classInfo.time}</Text>
+                            <Text style={styles.scheduleText}>{classInfo.days}</Text>
+
+                        </View>
+
+                    </View>
                 </TouchableOpacity>
+
             ))}
         </ScrollView>
     )
@@ -104,7 +115,7 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     timeText: {
-        fontSize: 16,
+        fontSize: 12,
         // color: "#ddd",
     },
     fullHourLine: {
@@ -129,8 +140,8 @@ const styles = StyleSheet.create({
         right: 0,
 
         borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
+        // justifyContent: 'center',
+        // alignItems: 'center',
     },
     schedule2: {
         position: 'absolute',

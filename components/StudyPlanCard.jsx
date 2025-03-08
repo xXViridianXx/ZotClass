@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import React, { PureComponent } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import StatusColor from './StatusColor'
 import { getClassStatus } from './getClass'
-import { removeClassFromStudyPlan, removeClassFromDay} from '../redux/reducers/user'
+import { removeClassFromStudyPlan, removeClassFromDay } from '../redux/reducers/user'
 import { deleteClass } from '../DatabaseHelpers/StudyPlan'
 import { useDispatch, useSelector } from 'react-redux'
 import { current } from '@reduxjs/toolkit'
@@ -34,6 +34,7 @@ const StudyPlanCard = React.memo(({ classObj }) => {
         classObj.days.length > 0 ? classObj.days : "TBA"]
     return (
         <TouchableOpacity
+            activeOpacity={.7}
             onLongPress={() => {
                 Alert.alert(
                     'Deleting Class',

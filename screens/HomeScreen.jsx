@@ -7,17 +7,16 @@ import { data, seasons, years, getCurrentQuarter } from '../components/Subjects'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadDarkMode, toggleDarkMode, setDarkMode, clearUserID, addClassToStudyPlan } from '../redux/reducers/user';
+import { loadDarkMode, toggleDarkMode, clearStudyPlan, clearUserID, addClassToStudyPlan } from '../redux/reducers/user';
 import { signOut, getAuth } from 'firebase/auth';
 import { fetchStudyPlan, filterClass } from '../DatabaseHelpers/StudyPlan';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const HomeScreen = () => {
     const navigation = useNavigation();
     const [selected, setSelected] = useState("")
-    const [selectedYear, setSelectedYear] = useState("")
-    const [selectedSeason, setSelectedSeason] = useState("")
+    const [selectedYear, setSelectedYear] = useState(years[0].value)
+    const [selectedSeason, setSelectedSeason] = useState(getCurrentQuarter().value)
     const [buttonPosition, setButtonPosition] = useState({ left: 0 });
-    // const [darkMode, setDarkMode] = useState(false)
 
     const dispatch = useDispatch();
     const darkMode = useSelector((state) => state.currentUser.darkMode);
@@ -30,9 +29,6 @@ const HomeScreen = () => {
 
 
     const handleYearChange = (value) => {
-        if (value.length > 4) {
-            return;
-        }
         setSelectedYear(value);
     };
 
@@ -49,17 +45,17 @@ const HomeScreen = () => {
             }
             await signOut(getAuth())
             dispatch(clearUserID())
+            dispatch(clearStudyPlan())
             setTimeout(() => {
                 navigation.navigate("LoginScreen");
             }, 100);
         } catch (error) {
             console.log("failed to logout: ", error)
         }
-
     }
 
     useEffect(() => {
-        console.log("in here")
+
         dispatch(loadDarkMode());
         const fetchData = async () => {
             const classesFromDB = await fetchStudyPlan(uid)
@@ -71,15 +67,13 @@ const HomeScreen = () => {
         fetchData()
     }, [uid])
 
-
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <SafeAreaView style={[styles.container, { backgroundColor: dynamicStyle(darkMode, "black", "white") }]}>
                 <View style={{ width: '80%', display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                     <TouchableOpacity onPress={handleToggle}
                         style={{ padding: 10, borderRadius: 5, alignSelf: 'flex-start', backgroundColor: darkMode ? "#011627" : "rgba( 50, 85, 147, 100)" }}
-                        activeOpacity={1}>
-
+                        activeOpacity={.7}>
                         <Ionicons name={darkMode ? "sunny" : "moon"} size={25} color="white" />
                     </TouchableOpacity>
 
@@ -99,7 +93,7 @@ const HomeScreen = () => {
                     <View style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <Text style={{ fontSize: 45, fontWeight: "800", fontStyle: 'italic', color: dynamicStyle(darkMode, "white", "rgba( 50, 85, 147, 100)") }}>ZotClass</Text>
                         {!uid ?
-                            <Text style={{ fontSize: 20, fontWeight: "800", fontStyle: 'italic', color: dynamicStyle(darkMode, "rgba( 50, 85, 147, 100)", "rgba( 50, 85, 147, 100)") }}>
+                            <Text style={{ fontSize: 15, fontWeight: "800", fontStyle: 'italic', color: dynamicStyle(darkMode, "rgba( 50, 85, 147, 100)", "rgba( 50, 85, 147, 100)") }}>
                                 Login To Access More Features
                             </Text> : null
                         }
@@ -128,7 +122,7 @@ const HomeScreen = () => {
                         data={seasons}
                         labelField="value"
                         valueField="key"
-                        value={getCurrentQuarter()}
+                        value={selectedSeason}
                         maxHeight={200}
                         activeColor={dynamicStyle(darkMode, "black", "white")}
                         placeholder='Enter Quarter...'
@@ -146,16 +140,14 @@ const HomeScreen = () => {
                         labelField="value"
                         valueField="key"
                         maxHeight={200}
-                        value={years[0]}
+                        value={selectedYear}
                         activeColor={dynamicStyle(darkMode, "black", "white")}
                         placeholder='Enter Year...'
                         placeholderStyle={{ color: "#e5e5e5", fontWeight: 700 }}
                         selectedTextStyle={[styles.selectedTextStyle, { color: darkMode ? "white" : "rgba( 50, 85, 147, 100)" }]}
                         itemTextStyle={[styles.dropDownTextStyle, { color: dynamicStyle(darkMode, "white", "#011627") }]}
                         containerStyle={{ borderRadius: 5, backgroundColor: dynamicStyle(darkMode, "#011627", "white") }}
-                        onChange={(season) => {
-                            setSelectedSeason(season.key);
-                        }}
+                        onChange={handleYearChange}
                     />
                     {/* <TextInput
                         placeholder="Enter Year..."
@@ -175,6 +167,7 @@ const HomeScreen = () => {
                                 navigation.navigate("ClassesScreen", { selected, selectedSeason, selectedYear, buttonPosition });
                                 Keyboard.dismiss()
                             } else {
+                                console.log(selectedSeason)
                                 alert("Please fill out all fields");
                             }
                         }}>

@@ -19,6 +19,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import ZotClassTabs from './screens/ZotClassTabs';
+import OnBoarding from './screens/OnBoarding';
 // import { ZotClassTabs } from './screens/ZotClassTabs';
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator()
@@ -84,6 +85,8 @@ export default function Main() {
                     </>
                 ) : (
                     <>
+
+                        {/* <Stack.Screen name="OnBoardingScreen" component={OnBoarding} options={{ headerShown: false }} /> */}
                         <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} options={{ headerShown: false }} />

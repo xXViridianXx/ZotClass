@@ -41,7 +41,7 @@ const StudyPlanScreen = () => {
                     <Text style={{ fontSize: 45, fontWeight: "800", fontStyle: "italic", color: dynamicStyle(darkMode, "white", "rgba( 50, 85, 147, 100)"), marginBottom: 5 }}>Study Plan</Text>
                     {!uid ?
                         <View style={{ flex: 1, width: "90%", justifyContent: "center", alignItems: "center" }}>
-                            <Text style={{ color: dynamicStyle(darkMode, "rgba( 255, 255, 255, .5)", "rgba( 50, 85, 147, .5)"), fontSize: 20, fontWeight: "600"}}>
+                            <Text style={{ color: dynamicStyle(darkMode, "rgba( 255, 255, 255, .5)", "rgba( 50, 85, 147, .5)"), fontSize: 20, fontWeight: "600" }}>
                                 Sign In To Create A Study Plan
                             </Text>
                         </View>
@@ -59,7 +59,7 @@ const StudyPlanScreen = () => {
                                         data={studyPlan}
                                         renderItem={renderSection}
                                         keyExtractor={(item, index) => index.toString()}
-                                    ListEmptyComponent={NotFound("Looks Like We're Partying Tonight")}
+                                        ListEmptyComponent={NotFound("Looks Like We're Partying Tonight")}
                                     />
                                 )}
 

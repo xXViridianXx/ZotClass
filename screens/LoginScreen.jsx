@@ -35,7 +35,7 @@ const LoginScreen = ({ navigation }) => {
         // keyboard won't cover input fields
 
         <TouchableWithoutFeedback onPress={dismissKeyboard}>
-            <KeyboardAvoidingView
+            <View
                 style={styles.container}
                 behavior='padding'
             >
@@ -76,7 +76,7 @@ const LoginScreen = ({ navigation }) => {
                     </View>
 
                 </View>
-            </KeyboardAvoidingView>
+            </View>
         </TouchableWithoutFeedback>
 
     )

@@ -21,8 +21,49 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
     const sectionUnits = section.units
     const sectionCode = section.sectionCode
     const meetings = section.meetings[0]
-    const location = meetings.bldg, days = meetings.days
-    const time = meetings.time
+    
+    let location = null;
+    let days = null
+    let time = null
+    let startHour = null
+    let startMin = null
+    let endHour = null
+    let endMin = null
+
+    const getTimes = (start, end) => {
+        let startHour = start["hour"]
+        let startMin = start["minute"]
+
+        let endHour = end["hour"]
+        let endMin = end["minute"]
+
+        let startMarker = "AM"
+        let endmarker = "AM"
+        if (startHour > 12) {
+            startHour -= 12
+            startMarker = "PM"
+        }
+        if (endHour > 12) {
+            endHour -= 12
+            endmarker = "PM"
+        }
+
+        let stringStart = `${startHour}:${startMin === 0 ? "00" : startMin} ${startMarker}`
+        let stringEnd = `${endHour}:${endMin === 0 ? "00" : endMin} ${endmarker}`
+        return `${stringStart}-${stringEnd}`
+    }
+    if (!meetings["timeIsTBA"]){
+        location = meetings.bldg[0]
+        days = meetings.days
+        time = getTimes(meetings["startTime"], meetings["endTime"])
+        startHour = meetings["startTime"]["hour"]
+        startMin = meetings["startTime"]["minute"]
+        endHour = meetings["endTime"]["hour"]
+        endMin = meetings["endTime"]["minute"]
+    }
+    
+
+
 
     const darkMode = useSelector((state) => state.currentUser.darkMode);
     const uid = useSelector((state) => state.currentUser.uid);
@@ -44,7 +85,11 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
         subject: subject,
         quarter: quarter,
         year: year,
-        sectionUnits: sectionUnits
+        sectionUnits: sectionUnits,
+        startHour: startHour,
+        startMin: startMin,
+        endHour: endHour,
+        endMin: endMin
     }
     const dispatch = useDispatch()
 
@@ -67,6 +112,7 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
 
         try {
             const updatedClassData = await addClass(uid, classData)
+            console.log(classData)
             setAddedClass(true)
             setRemovedClass(false)
             if (updatedClassData != -1) {

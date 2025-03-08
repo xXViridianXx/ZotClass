@@ -46,6 +46,9 @@ export const currentUserSlice = createSlice({
         removeClassFromStudyPlan: (state, action) => {
             const sectionCode = action.payload
             state.studyPlan = state.studyPlan.filter(classObj => classObj.sectionCode !== sectionCode)
+        },
+        clearStudyPlan: (state, action) => {
+            state.studyPlan = []
         }
     }
 })
@@ -55,7 +58,14 @@ export const currentUserSlice = createSlice({
 //     setDarkMode: (payload) => ({ type: 'darkMode/setDarkMode', payload }),
 // }
 // export const { setDarkMode } = toggleDarkModeSlice.actions
-export const { setDarkMode, setUID, clearUID, addClassToDay, removeClassFromDay, addClassToStudyPlan, removeClassFromStudyPlan } = currentUserSlice.actions;
+export const { setDarkMode,
+    setUID,
+    clearUID,
+    addClassToDay,
+    removeClassFromDay,
+    addClassToStudyPlan,
+    removeClassFromStudyPlan,
+    clearStudyPlan } = currentUserSlice.actions;
 
 // load from async
 export const loadDarkMode = () => async (dispatch) => {

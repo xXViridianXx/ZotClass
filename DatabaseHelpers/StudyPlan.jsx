@@ -15,8 +15,63 @@ import { addClassToDay } from "../redux/reducers/user";
 // Write, Edit and Run your Javascript code using JS Online Compiler
 
 
-const parseTimes = (timeString) => {
-    if (timeString == "TBA" || timeString == "") {
+// const parseTimes = (timeString) => {
+//     if (timeString == "TBA" || timeString == "") {
+//         return {
+//             startHour: -1,
+//             startMinutes: -1,
+//             endHour: -1,
+//             endMinutes: -1,
+//             duration: -1
+//         }
+//     }
+//     let splitTime = timeString.split("-")
+//     let cleanedTime = splitTime.map(word => word.trim())
+
+//     const startTime = cleanedTime[0]
+//     const endTime = cleanedTime[1]
+
+
+//     let time = startTime.split(":")
+
+//     let startHour = parseInt(time[0], 10)
+//     const startMinutes = parseInt(time[1], 10)
+
+//     time = endTime.split(":")
+//     let endHour = parseInt(time[0], 10)
+//     const endMinutes = parseInt(time[1], 10)
+
+//     if (endTime[endTime.length - 1] != "p") {
+//         let durationMinutes = ((endHour - startHour) * 60) + (endMinutes - startMinutes)
+//         return {
+//             startHour: startHour,
+//             startMinutes: startMinutes,
+//             endHour: endHour,
+//             endMinutes: endMinutes,
+//             duration: durationMinutes
+//         }
+//     }
+
+
+
+//     if (endHour < 12) endHour += 12
+//     if (endHour - startHour > 5 || startHour <= endTime - 12) {
+//         if (startHour + 12 <= endHour) startHour += 12
+//     }
+//     let durationMinutes = ((endHour - startHour) * 60) + (endMinutes - startMinutes)
+
+//     const timeData = {
+//         startHour: startHour,
+//         startMinutes: startMinutes,
+//         endHour: endHour,
+//         endMinutes: endMinutes,
+//         duration: durationMinutes
+//     }
+//     return timeData
+// }
+
+const parseTimes = (startHour, startMinute, endHour, endMinute) => {
+    if (startHour == null) {
         return {
             startHour: -1,
             startMinutes: -1,
@@ -25,40 +80,8 @@ const parseTimes = (timeString) => {
             duration: -1
         }
     }
-    let splitTime = timeString.split("-")
-    let cleanedTime = splitTime.map(word => word.trim())
 
-    const startTime = cleanedTime[0]
-    const endTime = cleanedTime[1]
-
-
-    let time = startTime.split(":")
-
-    let startHour = parseInt(time[0], 10)
-    const startMinutes = parseInt(time[1], 10)
-
-    time = endTime.split(":")
-    let endHour = parseInt(time[0], 10)
-    const endMinutes = parseInt(time[1], 10)
-
-    if (endTime[endTime.length - 1] != "p") {
-        let durationMinutes = ((endHour - startHour) * 60) + (endMinutes - startMinutes)
-        return {
-            startHour: startHour,
-            startMinutes: startMinutes,
-            endHour: endHour,
-            endMinutes: endMinutes,
-            duration: durationMinutes
-        }
-    }
-
-
-
-    if (endHour < 12) endHour += 12
-    if (endHour - startHour > 5 || startHour <= endTime - 12) {
-        if (startHour + 12 <= endHour) startHour += 12
-    }
-    let durationMinutes = ((endHour - startHour) * 60) + (endMinutes - startMinutes)
+    let durationMinutes = ((endHour - startHour) * 60) + (endMinute - startMinute)
 
     const timeData = {
         startHour: startHour,
@@ -105,7 +128,7 @@ const addClass = async (uid, classData) => {
         const querySnapshot = await getDocs(q);
         if (querySnapshot.empty) {
             console.log(`adding ${sectionCode}`);
-            const days = getDays(classData.days)
+            const days = getDays(classData.startHour, classData.startMinute, classData.endHour, classData.endMinute)
             classData.days = days
             const timeData = parseTimes(classData.time)
             classData.color = colorGenerator()
@@ -120,7 +143,7 @@ const addClass = async (uid, classData) => {
     } catch (error) {
         console.error("Error checking class existence: ", error);
     }
-    console.log("here")
+    // console.log("here")
     return -1
 
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TimeSlots from './TimeSlots';
@@ -7,6 +7,7 @@ import { schedule } from '../components/DummyData';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterClass } from '../DatabaseHelpers/StudyPlan';
 import { StatusBar } from 'expo-status-bar';
+import { getDay } from '../components/Subjects';
 // Example data
 
 
@@ -19,8 +20,11 @@ const TimeTable = () => {
     const uid = useSelector((state) => state.currentUser.uid);
     const studyPlan = useSelector((state) => state.currentUser.studyPlan);
     const darkMode = useSelector((state) => state.currentUser.darkMode);
-
+    const [isScrollSet, setIsScrollSet] = useState(false);
+    const scrollViewRef = useRef(null)
     const schedule = [[], [], [], [], [], []]
+    const day = getDay()
+    console.log("day: ", day)
     studyPlan.forEach((classObj) => {
         classObj.days.forEach(day => {
             if (day === "M") schedule[0].push(classObj)
@@ -32,15 +36,25 @@ const TimeTable = () => {
         });
     })
 
+
+
+    const handleScrollToDay = () => {
+        const day = getDay();
+        if (scrollViewRef.current && !isScrollSet) {
+            scrollViewRef.current.scrollTo({ x: day * SCREEN_WIDTH, animated: true });
+            setIsScrollSet(true); // To prevent multiple scrolls
+        }
+    };
+
     console.log("schedule", schedule)
     return (
-        <View style={[styles.container, {backgroundColor: darkMode ? "black" : "white"}]}>
+        <View style={[styles.container, { backgroundColor: darkMode ? "black" : "white" }]}>
             <StatusBar style={darkMode ? 'light' : 'dark'} />
 
-            <ScrollView horizontal pagingEnabled >
+            <ScrollView horizontal pagingEnabled ref={scrollViewRef} onLayout={handleScrollToDay}>
                 {daysOfWeek.map((day, index) => (
                     <View key={index} style={styles.rowContainer}>
-                        <View style={[styles.dayContainer, {backgroundColor: darkMode ? "#011627" : "rgba(50, 85, 147, 100)"}]}>
+                        <View style={[styles.dayContainer, { backgroundColor: darkMode ? "#011627" : "rgba(50, 85, 147, 100)" }]}>
                             <Text style={styles.dayText}>{day}</Text>
                         </View>
                         <TimeSlots classData={schedule[index]} uid={uid} />
