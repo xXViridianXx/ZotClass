@@ -22,12 +22,11 @@ const ClassesScreen = ({ route }) => {
 
     const retrieve = async (subject, season, year) => {
         try {
+            setLoading(true)
             if (!subject || !season || !year) {
 
                 return []
             }
-
-            setLoading(true)
             const data = await getClass(subject, season, year)
             classArray = Object.values(data.classes)
             setClassData(classArray)
@@ -41,7 +40,9 @@ const ClassesScreen = ({ route }) => {
     }
     useEffect(() => {
 
-        retrieve(selected, selectedSeason, selectedYear)
+        if (selected && selectedSeason && selectedYear) {
+            retrieve(selected, selectedSeason, selectedYear)
+        }
     }, [])
 
     const renderClass = ({ item }) => {
@@ -51,6 +52,7 @@ const ClassesScreen = ({ route }) => {
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: darkMode ? "black" : "white" }]}>
             <StatusBar style={darkMode ? 'light' : 'dark'} />
+
             {loading ?
                 (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <ActivityIndicator size="large" />
@@ -61,7 +63,7 @@ const ClassesScreen = ({ route }) => {
                         showsVerticalScrollIndicator={false}
                         data={classData} renderItem={renderClass}
                         keyExtractor={(item, index) => index.toString()}
-                        ListEmptyComponent={selected && selectedSeason && selectedYear ? NotFound : null}
+                        ListEmptyComponent={selected && selectedSeason && selectedYear ? NotFound("Sorry, we couldn't find that...") : null}
                     />
                     <View style={{ display: "flex", justifyContent: "flex-start", paddingTop: 10 }}>
                         <BackButton />

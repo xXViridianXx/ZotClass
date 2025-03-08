@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, Image} from 'react-native'
 import React from 'react'
-const NotFound = () => {
+const NotFound = (text) => {
     return (
         <View style={styles.container}>
             <Image source={require('../images/notFound.png')} style={styles.image} />
-            <Text style={styles.containerText}>Sorry, we couldn't find that...</Text>
+            <Text style={styles.containerText}>{text}</Text>
         </View>
     )
 }

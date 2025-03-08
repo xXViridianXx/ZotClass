@@ -8,8 +8,6 @@ const LoginInputs = ({ labelText, input, setInput, color, boardType, secure }) =
         <TextInput
             placeholder={labelText}
             value={input}
-
-
             onChangeText={text => setInput(text)}
             style={styles.input}
             placeholderTextColor={color}

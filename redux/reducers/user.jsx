@@ -2,18 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const initialState = {
     darkMode: false,
-    uid: null
+    uid: null,
+    schedule: [ // Monday = 0, Tuesday = 1, etc... last index for TBA stuff
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+    ],
+    studyPlan: []
 }
-
-// export const toggleDarkModeSlice = createSlice({
-//     name: "toggleDarkMode",
-//     initialState,
-//     reducers: {
-//         setDarkMode: (state, action) => {
-//             state.darkMode = action.payload
-//         },
-//     }
-// })
 
 export const currentUserSlice = createSlice({
     name: "currentUser",
@@ -27,6 +26,29 @@ export const currentUserSlice = createSlice({
         },
         clearUID: (state, action) => {
             state.uid = null
+        },
+        addClassToDay: (state, action) => {
+            const { index, newClass } = action.payload
+            if (index >= 0 && index < state.schedule.length) {
+                state.schedule[index].push(newClass)
+            }
+        },
+        removeClassFromDay: (state, action) => {
+            const sectionCode = action.payload;
+            state.schedule = state.schedule.map(daySchedule =>
+                daySchedule.filter(classObj => classObj.sectionCode !== sectionCode)
+            );
+
+        },
+        addClassToStudyPlan: (state, action) => {
+            state.studyPlan.push(action.payload)
+        },
+        removeClassFromStudyPlan: (state, action) => {
+            const sectionCode = action.payload
+            state.studyPlan = state.studyPlan.filter(classObj => classObj.sectionCode !== sectionCode)
+        },
+        clearStudyPlan: (state, action) => {
+            state.studyPlan = []
         }
     }
 })
@@ -36,7 +58,14 @@ export const currentUserSlice = createSlice({
 //     setDarkMode: (payload) => ({ type: 'darkMode/setDarkMode', payload }),
 // }
 // export const { setDarkMode } = toggleDarkModeSlice.actions
-export const { setDarkMode, setUID, clearUID } = currentUserSlice.actions;
+export const { setDarkMode,
+    setUID,
+    clearUID,
+    addClassToDay,
+    removeClassFromDay,
+    addClassToStudyPlan,
+    removeClassFromStudyPlan,
+    clearStudyPlan } = currentUserSlice.actions;
 
 // load from async
 export const loadDarkMode = () => async (dispatch) => {
