@@ -12,7 +12,7 @@ import { signOut, getAuth } from 'firebase/auth';
 const ClassesScreen = () => {
     const navigation = useNavigation();
     const [selected, setSelected] = useState("")
-    const [selectedYear, setSelectedYear] = useState("")
+    const [selectedYear, setSelectedYear] = useState(years[0].value)
     const [selectedSeason, setSelectedSeason] = useState("")
     const [buttonPosition, setButtonPosition] = useState({ left: 0 });
     // const [darkMode, setDarkMode] = useState(false)

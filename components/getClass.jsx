@@ -2,14 +2,38 @@ import ReturnClassStatus from './ReturnClassStatus'
 const getClass = async (subject, season, year) => {
     try {
         // const url = `https://1tgg4m2pra.execute-api.us-east-2.amazonaws.com/prod/courses?subject=${subject}`
-        const url = `https://api.peterportal.org/rest/v0/schedule/soc?term=${year}%20${season}&department=${subject}`
-        console.log(url)
-        const response = await fetch(url)
+        // const url = `https://api.peterportal.org/rest/v0/schedule/soc?term=${year}%20${season}&department=${subject}`
+        // console.log(url)
+        // const response = await fetch(url)
+        // if (!response.ok) {
+        //     throw new Error('Response was bad :(');
+        // }
+
+        const API_KEY = process.env.REACT_APP_ANTEATER_API_KEY;
+        const response = await fetch(
+            "https://anteaterapi.com/v2/rest/websoc?" +
+            new URLSearchParams({
+                year: year,
+                quarter: season,
+                department: subject,
+            }),
+            {
+                headers: {
+                    Authorization: `Bearer ${API_KEY}`,  // Use the API key securely
+                    // other headers if needed
+                },
+                // other options if needed
+            }
+        );
+
         if (!response.ok) {
-            throw new Error('Response was bad :(');
+            throw new Error('API request failed');
         }
+
         const data = await response.json()
-        classes = data["schools"][0]["departments"][0]["courses"]
+        const classes = data["data"]["schools"][0]["departments"][0]["courses"]
+        // console.log(classes[0].courseNumber)
+        classes.sort((a, b) => a.courseNumber.localeCompare(b.courseNumber));
         numOfClasses = classes.length
         return { classes: classes, numOfClasses: numOfClasses }
     }
@@ -27,14 +51,17 @@ const GetCourseInfo = async (className) => {
     // couresName = couresName.replace("&", "%20")
     const query = data.join("");
     try {
-        const url = `https://api.peterportal.org/rest/v0/courses/${query}`
+        const url = `https://anteaterapi.com/v2/rest/courses/${query}`
         const response = await fetch(url)
         if (!response.ok) {
             // throw new Error('Response was bad in GetCourseInfo');
-            return {description: "", prereqs: "", prereqTree: {}}
+            return { description: "", prereqs: "", prereqTree: {} }
         }
-        const data = await response.json()
-        return {description: data.description, prereqs: data.prerequisite_text, prereqTree: data.prerequisite_tree}
+        const json = await response.json()
+        const data = json["data"]
+        // console.log(data.prerequisiteText)
+        return { description: data.description, prereqs: data.prerequisiteText, prereqTree: data.prerequisite_tree }
+
     }
     catch (e) {
         console.log(e)
@@ -66,4 +93,4 @@ const getClassStatus = (sections) => {
     return classStatus
 }
 
-export {getClass, getClassStatus, GetCourseInfo}
+export { getClass, getClassStatus, GetCourseInfo }

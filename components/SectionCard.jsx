@@ -19,8 +19,46 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
     const sectionUnits = section.units
     const sectionCode = section.sectionCode
     const meetings = section.meetings[0]
-    const location = meetings.bldg, days = meetings.days
-    const time = meetings.time
+    
+    let location = null;
+    let days = null
+    let time = null
+    let startHour = null
+    let startMin = null
+    let endHour = null
+    let endMin = null
+
+    const getTimes = (start, end) => {
+        let startHour = start["hour"]
+        let startMin = start["minute"]
+
+        let endHour = end["hour"]
+        let endMin = end["minute"]
+
+        let startMarker = "AM"
+        let endmarker = "AM"
+        if (startHour > 12) {
+            startHour -= 12
+            startMarker = "PM"
+        }
+        if (endHour > 12) {
+            endHour -= 12
+            endmarker = "PM"
+        }
+
+        let stringStart = `${startHour}:${startMin === 0 ? "00" : startMin} ${startMarker}`
+        let stringEnd = `${endHour}:${endMin === 0 ? "00" : endMin} ${endmarker}`
+        return `${stringStart}-${stringEnd}`
+    }
+    if (!meetings["timeIsTBA"]){
+        location = meetings.bldg[0]
+        days = meetings.days
+        time = getTimes(meetings["startTime"], meetings["endTime"])
+        startHour = meetings["startTime"]["hour"]
+        startMin = meetings["startTime"]["minute"]
+        endHour = meetings["endTime"]["hour"]
+        endMin = meetings["endTime"]["minute"]
+    }
 
     const darkMode = useSelector((state) => state.currentUser.darkMode);
     const uid = useSelector((state) => state.currentUser.uid);
@@ -35,9 +73,17 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
         sectionType: sectionType,
         sectionNumber: sectionNum,
         sectionCode: sectionCode,
+        classLocation: location,
+        days: days,
+        time: time,
         subject: subject,
         quarter: quarter,
         year: year,
+        sectionUnits: sectionUnits,
+        startHour: startHour,
+        startMinutes: startMin,
+        endHour: endHour,
+        endMinutes: endMin
     }
 
     const handleAddClass = async () => {
@@ -74,7 +120,7 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
                 <View>
                     {filteredStaff}
                 </View>
-                {loading ? (
+                {/* {loading ? (
                     <ActivityIndicator color="#e5e5e5" size={30} /> // Loading Indicator
                 ) : (
                     !addedClass ? (
@@ -86,7 +132,7 @@ const SectionCard = React.memo(({ section, name, title, subject, quarter, year }
                             <AntDesign name="minuscircle" size={30} color="#ff5a5f" />
                         </TouchableOpacity>
                     )
-                )}
+                )} */}
             </View>
         )
     };
